@@ -1,288 +1,299 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>User-editable Shapes</title>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-<meta charset="utf-8">
-<style>
+  <title>User-editable Shapes</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <style>
 
-  html, body, #map-canvas {
-    height: 100%;
-    margin: 0px;
-    padding: 0px
-  }
-
-  .controls {
-    margin-top: 16px;
-    border: 1px solid transparent;
-    border-radius: 2px 0 0 2px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    height: 32px;
-    outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  }
-
-  #pac-input {
-    background-color: #fff;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-    margin-left: 12px;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width: 400px;
-  }
-
-  #pac-input:focus {
-    border-color: #4d90fe;
-  }
-
-  .pac-container {
-    font-family: Roboto;
-  }
-
-  #type-selector {
-    color: #fff;
-    background-color: #4d90fe;
-    padding: 5px 11px 0px 11px;
-  }
-
-  #type-selector label {
-    font-family: Roboto;
-    font-size: 13px;
-    font-weight: 300;
-  }
-
-
-</style>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>
-<script>
-  // This example adds a user-editable rectangle to the map.
-  var markers = [];
-  var map;
-  function initialize() {
-    var mapOptions = {
-      center: new google.maps.LatLng(32.476664, 34.974388),
-      zoom: 14,
-      mapTypeId: google.maps.MapTypeId.TERRAIN
-    };
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-    var circleOptions = {
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#FF0000',
-      fillOpacity: 0.35,
-      map: map,
-      center: new google.maps.LatLng(32.476664, 34.974388),
-      radius: 600,
-      editable: true,
-      draggable: true
-    };
-
-    var circle = new google.maps.Circle(circleOptions);
-    circle.setMap(map);
-    markers.push(circle);
-    // Create the search box and link it to the UI element.
-    var input = /** @type {HTMLInputElement} */(
-        document.getElementById('pac-input'));
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    var searchBox = new google.maps.places.SearchBox(
-        /** @type {HTMLInputElement} */(input));
-
-    // Listen for the event fired when the user selects an item from the
-    // pick list. Retrieve the matching places for that item.
-    google.maps.event.addListener(searchBox, 'places_changed', function () {
-      var places = searchBox.getPlaces();
-
-      if (places.length == 0) {
-        return;
-      }
-      for (var i = 0, marker; marker = markers[i]; i++) {
-        marker.setMap(null);
-      }
-
-      // For each place, get the icon, place name, and location.
-
-      var bounds = new google.maps.LatLngBounds();
-      for (var i = 0, place; place = places[i]; i++) {
-        var image = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
-
-        // Create a marker for each place.
-        var marker = new google.maps.Marker({
-          map: map,
-          icon: image,
-          title: place.name,
-          position: place.geometry.location
-        });
-
-        //markers.push(marker);
-
-        bounds.extend(place.geometry.location);
-      }
-
-      map.fitBounds(bounds);
-    });
-
-    // Bias the SearchBox results towards places that are within the bounds of the
-    // current map's viewport.
-    google.maps.event.addListener(map, 'bounds_changed', function () {
-      var bounds = map.getBounds();
-      searchBox.setBounds(bounds);
-    });
-
-    var drawingManager = new google.maps.drawing.DrawingManager({
-      //drawingMode: google.maps.drawing.OverlayType.MARKER,
-      drawingControl: true,
-      drawingControlOptions: {
-        position: google.maps.ControlPosition.TOP_CENTER,
-        drawingModes: [
-          //google.maps.drawing.OverlayType.MARKER,
-          google.maps.drawing.OverlayType.CIRCLE,
-          google.maps.drawing.OverlayType.POLYGON,
-          //google.maps.drawing.OverlayType.POLYLINE,
-          google.maps.drawing.OverlayType.RECTANGLE
-        ]
-      },
-      markerOptions: {
-        //icon: 'images/beachflag.png'
-      },
-      circleOptions: {
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#FF0000',
-        fillOpacity: 0.35,
-        draggable: true,
-        editable: true,
-        zIndex: 1
-      }
-    });
-    drawingManager.setMap(map);
-    google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
-      if (event.type == google.maps.drawing.OverlayType.CIRCLE) {
-        var radius = event.overlay.getRadius();
-      }
-      markers.push(event.overlay);
-    });
-    google.maps.event.addListener(map, 'click', function (e) {
-      console.log('e', e)
-    });
-  }
-  google.maps.event.addDomListener(window, 'load', initialize);
-
-</script>
-
-<script>
-  //https://gist.github.com/mkhatib/5641004
-  /**
-   * Generates number of random geolocation points given a center and a radius.
-   * @param  {Object} center A JS object with lat and lng attributes.
-   * @param  {number} radius Radius in meters.
-   * @param {number} count Number of points to generate.
-   * @return {array} Array of Objects with lat and lng attributes.
-   */
-  function generateRandomPoints(center, radius, count) {
-    var points = [];
-    for (var i = 0; i < count; i++) {
-      points.push(generateRandomPoint(center, radius));
+    html, body, #map-canvas {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
     }
-    return points;
-  }
+
+    .controls {
+      margin-top: 16px;
+      border: 1px solid transparent;
+      border-radius: 2px 0 0 2px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      height: 32px;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    #pac-input {
+      background-color: #fff;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      margin-left: 12px;
+      padding: 0 11px 0 13px;
+      text-overflow: ellipsis;
+      width: 400px;
+    }
+
+    #pac-input:focus {
+      border-color: #4d90fe;
+    }
+
+    .pac-container {
+      font-family: Roboto;
+    }
+
+    #type-selector {
+      color: #fff;
+      background-color: #4d90fe;
+      padding: 5px 11px 0px 11px;
+    }
+
+    #type-selector label {
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 300;
+    }
 
 
-  /**
-   * Generates number of random geolocation points given a center and a radius.
-   * Reference URL: http://goo.gl/KWcPE.
-   * @param  {Object} center A JS object with lat and lng attributes.
-   * @param  {number} radius Radius in meters.
-   * @return {Object} The generated random points as JS object with lat and lng attributes.
-   */
-  function generateRandomPoint(center, radius) {
-    var x0 = center.lng;
-    var y0 = center.lat;
-    // Convert Radius from meters to degrees.
-    var rd = radius / 111300;
+  </style>
+  <script
+      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>
+  <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
+  <script src="geohash.js"></script>
+  <script>
+    // This example adds a user-editable rectangle to the map.
+    var markers = [];
+    var map;
+    function initialize() {
+      var mapOptions = {
+        center: new google.maps.LatLng(32.476664, 34.974388),
+        zoom: 14,
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+      };
+      map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    var u = Math.random();
-    var v = Math.random();
+      // Create the search box and link it to the UI element.
+      var input = /** @type {HTMLInputElement} */(
+          document.getElementById('pac-input'));
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      var searchBox = new google.maps.places.SearchBox(
+          /** @type {HTMLInputElement} */(input));
 
-    var w = rd * Math.sqrt(u);
-    var t = 2 * Math.PI * v;
-    var x = w * Math.cos(t);
-    var y = w * Math.sin(t);
+      // Listen for the event fired when the user selects an item from the
+      // pick list. Retrieve the matching places for that item.
+      google.maps.event.addListener(searchBox, 'places_changed', function () {
+        var places = searchBox.getPlaces();
 
-    var xp = x / Math.cos(y0);
+        if (places.length == 0) {
+          return;
+        }
+        for (var i = 0, marker; marker = markers[i]; i++) {
+          marker.setMap(null);
+        }
 
-    // Resulting point.
-    return {'lat': y + y0, 'lng': xp + x0};
-  }
+        // For each place, get the icon, place name, and location.
 
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0, place; place = places[i]; i++) {
+          var image = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+          };
 
-  // Usage Example.
-  // Generates 100 points that is in a 1km radius from the given lat and lng point.
-  var randomGeoPoints = generateRandomPoints({'lat': 24.23, 'lng': 23.12}, 1000, 100);
-</script>
+          // Create a marker for each place.
+          var marker = new google.maps.Marker({
+            map: map,
+            icon: image,
+            title: place.name,
+            position: place.geometry.location
+          });
 
+          //markers.push(marker);
 
-<script>
-  var withinRegions = function (point) {
-    var result = false;
-    markers.forEach(function (marker) {
-      var bound = marker.getBounds();
-      var center = bound.getCenter();
-      var latLng = new google.maps.LatLng(point.lat, point.lng);
+          bounds.extend(place.geometry.location);
+        }
 
-      function pointInCircle(point, radius, center) {
-        return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= radius)
-      }
+        map.fitBounds(bounds);
+      });
 
-      try {
-        if (google.maps.geometry.poly.containsLocation(latLng, marker))
-          result = true;
-      }
-      catch (ex) {
-        if (pointInCircle(latLng, marker.radius, center))
-          result = true;
-      }
-    });
-    return result;
-  };
+      // Bias the SearchBox results towards places that are within the bounds of the
+      // current map's viewport.
+      google.maps.event.addListener(map, 'bounds_changed', function () {
+        var bounds = map.getBounds();
+        searchBox.setBounds(bounds);
+      });
 
-  var addPoint = function () {
-    var center = new google.maps.LatLng(32.476664, 34.974388);
-    var point = generateRandomPoint({lat: center.k, lng: center.D}, 3000);
-    var latLng = new google.maps.LatLng(point.lat, point.lng);
+      var drawingManager = new google.maps.drawing.DrawingManager({
+        //drawingMode: google.maps.drawing.OverlayType.MARKER,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [
+            //google.maps.drawing.OverlayType.MARKER,
+            google.maps.drawing.OverlayType.CIRCLE,
+            google.maps.drawing.OverlayType.POLYGON,
+            //google.maps.drawing.OverlayType.POLYLINE,
+            google.maps.drawing.OverlayType.RECTANGLE
+          ]
+        },
+        markerOptions: {
+          //icon: 'images/beachflag.png'
+        },
+        circleOptions: {
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          draggable: true,
+          editable: true,
+          zIndex: 1
+        },
+        rectangleOptions: {
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          draggable: true,
+          editable: true,
+          zIndex: 1
+        },
+        polygonOptions: {
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          draggable: true,
+          editable: true,
+          zIndex: 1
+        }
+      });
+      drawingManager.setMap(map);
+      google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
+        event.overlay.uuid = joola.common.uuid();
+        markers.push(event.overlay);
 
-    var circle = {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: withinRegions(point) ? 'red' : 'green',
-      fillOpacity: .2,
-      strokeColor: 'white',
-      strokeWeight: .5,
-      scale: 10
+        if (event.type == google.maps.drawing.OverlayType.CIRCLE) {
+          event.overlay.type = 'CIRCLE';
+          google.maps.event.addListener(event.overlay, 'radius_changed', function () {
+            joola.emit('polygon_updated', [event.overlay]);
+          });
+          google.maps.event.addListener(event.overlay, 'center_changed', function () {
+            joola.emit('polygon_updated', [event.overlay]);
+          });
+        }
+        else if (event.type == google.maps.drawing.OverlayType.RECTANGLE) {
+          event.overlay.type = 'RECT';
+          google.maps.event.addListener(event.overlay, 'bounds_changed', function () {
+            joola.emit('polygon_updated', [event.overlay]);
+          });
+        }
+        else if (event.type == google.maps.drawing.OverlayType.POLYGON) {
+          event.overlay.type = 'POLYGON';
+          google.maps.event.addListener(event.overlay.getPath(), 'insert_at', function () {
+            joola.emit('polygon_updated', [event.overlay]);
+          });
+          google.maps.event.addListener(event.overlay.getPath(), 'remove_at', function () {
+            joola.emit('polygon_updated', [event.overlay]);
+          });
+          google.maps.event.addListener(event.overlay.getPath(), 'set_at', function () {
+            joola.emit('polygon_updated', [event.overlay]);
+          });
+        }
+        joola.emit('polygon_added', [event.overlay]);
+      });
+      google.maps.event.addListener(map, 'click', function (e) {
+        console.log('e', e)
+      });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
+  <script>
+    var withinRegions = function (point) {
+      var result = false;
+      markers.forEach(function (marker) {
+        var bound = marker.getBounds();
+        var center = bound.getCenter();
+        var latLng = new google.maps.LatLng(point.lat, point.lon);
+
+        function pointInCircle(point, radius, center) {
+          return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= radius)
+        }
+
+        try {
+          if (google.maps.geometry.poly.containsLocation(latLng, marker))
+            result = true;
+        }
+        catch (ex) {
+          if (pointInCircle(latLng, marker.radius, center))
+            result = true;
+        }
+      });
+      return result;
     };
-    new google.maps.Marker({
-      position: latLng,
-      map: map,
-      icon: circle
+
+  </script>
+  <script>
+    joola.on('ready', function () {
+      console.log('ready');
     });
-    console.log(point);
-  };
-  setInterval(addPoint, 1000);
-  //addPoint();
-</script>
-<script>
-  
-</script>
+  </script>
+
+  <script>
+    var query = {
+      timeframe: 'last_1_second',
+      interval: 'second',
+      dimensions: ['lat', 'lon', 'tag'],
+      metrics: ['metric'],
+      collection: 'geo',
+      realtime: true
+    };
+    joola.on('polygon_added', function (marker) {
+      var _query = joola.common.extend(query, {
+        uuid: marker[0].uuid,
+        marker_type: marker[0].type,
+        filter: [
+          ['location', 'geo_distance', [marker[0].getRadius(), encodeGeoHash(marker[0].getCenter().k, marker[0].getCenter().D), [marker[0].getCenter().k, marker[0].getCenter().D]]]
+        ]
+      });
+      console.log('polygon added', marker, _query);
+      joola.query.fetch(_query, function (err, data) {
+        if (err)
+          throw err;
+        var points = data[0].documents;
+        console.log('got', points.length, 'points for uuid', data[0].query.uuid);
+        points.forEach(function (point) {
+          var latLng = new google.maps.LatLng(point.lat, point.lon);
+
+          var circle = {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: 'red',//withinRegions(point) ? 'red' : 'green',
+            fillOpacity: .2,
+            strokeColor: 'white',
+            strokeWeight: .5,
+            scale: 5
+          };
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            icon: circle
+          });
+          setTimeout(function () {
+            marker.setMap(null);
+          }, 5000);
+        });
+      });
+    });
+    joola.on('polygon_updated', function (marker) {
+      console.log('polygon updated', marker);
+    });
+  </script>
 </head>
 <body>
 <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>

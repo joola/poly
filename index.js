@@ -12,35 +12,20 @@ joola.init({}, function (err) {
 
   joola.users.verifyAPIToken({user: joola.SYSTEM_USER}, 'apitoken-demo', function (err, user) {
     function generateRandomData() {
-      var randomGeoPoints = generateRandomPoints({'lat': 24.23, 'lng': 23.12}, 1000, 100);
+      var randomGeoPoints = generateRandomPoints({'lat': 32.476664, 'lon': 34.974388}, 5000, 5);
       randomGeoPoints.forEach(function (point) {
+        point.location = {lat: point.lat, lon: point.lon};
         point.tag = 'tag';
         point.metric = 1;
       });
 
       joola.beacon.insert({user: user}, 'geo', randomGeoPoints, function (err) {
-        console.log('pushed', err);
-      });
-    }
 
-    function queryData() {
-      joola.query.fetch({user: user}, {
-        timeframe: 'last_1_second',
-        interval: 'second',
-        dimensions: ['lat', 'lng', 'tag'],
-        metrics: ['metric'],
-        collection: 'geo'
-      }, function (err, docs) {
-        //console.log('result', docs.documents.length);
-        if (docs && docs.documents && docs.documents.length > 0) {
-          //console.log(docs.documents[0].metric);
-          joola.io.emit('test', docs.documents);
-        }
       });
     }
 
     setInterval(generateRandomData, 1000);
-    setInterval(queryData, 1000);
+    //setInterval(queryData, 1000);
   });
 
   http.createServer(function (request, response) {
@@ -77,7 +62,7 @@ function generateRandomPoints(center, radius, count) {
  * @return {Object} The generated random points as JS object with lat and lng attributes.
  */
 function generateRandomPoint(center, radius) {
-  var x0 = center.lng;
+  var x0 = center.lon;
   var y0 = center.lat;
   // Convert Radius from meters to degrees.
   var rd = radius / 111300;
@@ -93,7 +78,7 @@ function generateRandomPoint(center, radius) {
   var xp = x / Math.cos(y0);
 
   // Resulting point.
-  return {'lat': y + y0, 'lng': xp + x0};
+  return {'lat': y + y0, 'lon': xp + x0};
 }
 
 

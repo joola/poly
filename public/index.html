@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Realtime Geographic Analytics | Joola</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="http://layout.jquery-dev.com/lib/css/layout-default-latest.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/default.css">
+
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+  <script src="http://layout.jquery-dev.com/lib/js/jquery.layout-latest.js"></script>
+
+  <script
+      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>
+  <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
+  <script src="/js/wireframe.js"></script>
+  <script src="/js/geohash.js"></script>
+  <script src="/js/joola.js"></script>
+  <script src="/js/map.js"></script>
+</head>
+<body>
+
+<!--
+<div id="player">
+  <div id="volume"></div>
+</div>
+-->
+
+
+<div id="map-canvas"></div>
+
+
+<div class="left-pane expanded">
+  <div class="handle"></div>
+  <div class="content map-controls">
+    <img src="http://joo.la/img/joola_full_blue.png" class="logo">
+
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+
+    <h3 style="margin-bottom:0;margin-top:40px;">Map overlay</h3>
+
+    <p>Control the map look & feel</p>
+
+    <form>
+      <div class="form-group">
+
+        <select id="maptype" class="controls">
+          <option value="hybrid">Hybrid Map</option>
+          <option value="terrain" selected>Terrain Map</option>
+          <!--<option id="road">Road</option>-->
+          <option value="satellite">Satellite Map</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <select id="show-heatmap" class="controls">
+          <option value="heatmap">Show Heatmap</option>
+          <option value="markers" selected>Show Markers</option>
+        </select>
+      </div>
+    </form>
+    <h3 id="filters-label"></h3>
+
+    <p class="bounds" style="padding-top:30px;">Map visible boundaries:
+      <br/>
+      <span id="bounds-right-top" class="bounds"></span><br/>
+      <span id="bounds-left-bottom" class="bounds"></span>
+    </p>
+
+    <div id="filters-container"></div>
+  </div>
+</div>
+
+
+<div class="right-pane expanded">
+  <div class="handle"></div>
+  <div class="content filters">
+    <h3 style="margin-bottom:0;margin-top:0;">Filters</h3>
+<p style="padding-top:10px;">Draw polygons to indicate what geo sources should be included and filter by dimensions and metrics to further refine the results.</p>
+    <h4 id="drawing-tools-label">Drawing tools</h4>
+    <p>Draw polygons and filter results.</p>
+    <div id="drawing-tools-container"></div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<div class="bottom-pane">
+  <div class="handle"></div>
+  <div class="content">
+    <div class="row">
+      <div id="metric1" class="col-md-4">test</div>
+      <div class="col-md-4">test</div>
+      <div class="col-md-4">test</div>
+      <div class="col-md-4">test</div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

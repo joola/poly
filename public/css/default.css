@@ -1,0 +1,299 @@
+
+html, body, #map-canvas {
+  height: 100%;
+  margin: 0px;
+  padding: 0px
+}
+
+* {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+.controls {
+  margin-top: 16px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 250px;
+}
+
+#maptype, #show-heatmap, #show-markers {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
+.checkbox {
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  text-overflow: ellipsis;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+.pac-container {
+  font-family: Roboto;
+}
+
+#type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.logo {
+  height: 55px;
+}
+
+#player {
+  position: absolute;
+  bottom: 20px;
+  width: 350px;
+  height: 50px;
+  margin: auto auto;
+}
+
+#volume {
+  position: absolute;
+  left: 24px;
+  margin: 0 auto;
+  height: 15px;
+  width: 300px;
+  background: url('http://iviewsource.com/exercises/audioslider/images/volume-empty.png') no-repeat left top;
+  border: none;
+  outline: none;
+}
+
+#volume .ui-slider-range-min {
+  height: 15px;
+  width: 300px;
+  position: absolute;
+  background: url('http://iviewsource.com/exercises/audioslider/images/volume-full.png') no-repeat left top;
+  border: none;
+  outline: none;
+}
+
+#volume .ui-slider-handle {
+  width: 38px;
+  height: 39px;
+  top: -8px;
+  background: url('http://iviewsource.com/exercises/audioslider/images/volume-knob.png') no-repeat left top;
+  position: absolute;
+  margin-left: -15px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.tooltip {
+  border: thin 1px #eee;
+  background-color: #FFFBF0;
+  padding: 5px;
+  width: 200px;
+}
+
+.bottom-pane {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  height: 20px;
+  width: 1080px;
+  background-color: blue;
+  margin-left: -540px;
+}
+
+.bottom-pane .handle {
+  bottom: 0;
+  width: 1080px;
+  height: 20px;
+  background-color: gray;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bottom-pane.expanded {
+  height: 630px;
+}
+
+.left-pane {
+  position: fixed;
+  top: -450px;
+  left: -50px;
+  height: 600px;
+  width: 370px;
+  background-color: whitesmoke;
+
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  border-bottom-right-radius: 10px;
+
+  transition: all 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.left-pane .logo {
+  margin-bottom: 30px;
+  transition: all 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.left-pane .logo {
+  position: relative;
+  top: 450px;
+  left: 50px;
+}
+
+.left-pane.expanded .logo {
+  top: 0;
+  left: 0;
+}
+
+.left-pane .handle {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  left: 0;
+  height: 600px;
+  background-color: gray;
+  display: none;
+}
+
+.left-pane.expanded {
+  top: 0;
+  left: 0;
+  height: 450px;
+  width: 300px;
+}
+
+.left-pane.expanded .handle {
+  left: 390px;
+}
+
+.left-pane .content {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.drawing-manager div[draggable="false"] {
+  padding: 5px !important;
+}
+
+.content h3 {
+  font-size: 20px;
+}
+
+.content h4 {
+  font-size: 18px;
+  padding-top:20px;
+}
+
+
+.content h3:not(:first-of-type) {
+  margin-top: 30px;
+}
+
+.content p {
+  width: 87%
+}
+
+.map-controls .form-group:first-of-type select {
+  margin-top: 0;
+}
+
+.right-pane {
+  position: fixed;
+  top: 50%;
+  right: -400px;
+  height: 600px;
+  width: 400px;
+  background-color: whitesmoke;
+
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+  transition: all 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+.right-pane .handle {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  left: 0;
+  height: 600px;
+  background-color: gray;
+  display: none;
+}
+
+.right-pane.expanded {
+  top: 50%;
+  right: 0;
+  height: 600px;
+  width: 400px;
+  margin-top: -300px;
+}
+
+.right-pane.expanded .handle {
+  left: 390px;
+}
+
+.right-pane .content {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.content p.none {
+  margin-top: 20px;
+}
+
+.content .bounds{
+  font-size:11px;
+  color:#666;
+  width:100%;
+}
+

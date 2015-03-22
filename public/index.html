@@ -15,11 +15,13 @@
 
   <script
       src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
   <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
   <script src="/js/wireframe.js"></script>
   <script src="/js/geohash.js"></script>
   <script src="/js/joola.js"></script>
   <script src="/js/map.js"></script>
+
 </head>
 <body>
 
@@ -34,58 +36,81 @@
 
 
 <div class="left-pane expanded">
-  <div class="handle"></div>
   <div class="content map-controls">
+    <div class="expand"><i class="glyphicon glyphicon-collapse-up"></i></div>
     <img src="http://joo.la/img/joola_full_blue.png" class="logo">
 
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+    <div class="outer-wrapper">
+      <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
 
-    <h3 style="margin-bottom:0;margin-top:40px;">Map overlay</h3>
 
-    <p>Control the map look & feel</p>
+      <h3 style="margin-bottom:0;margin-top:40px;">Map overlay</h3>
 
-    <form>
-      <div class="form-group">
+      <p>Control the map look & feel</p>
 
-        <select id="maptype" class="controls">
-          <option value="hybrid">Hybrid Map</option>
-          <option value="terrain" selected>Terrain Map</option>
-          <!--<option id="road">Road</option>-->
-          <option value="satellite">Satellite Map</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <select id="show-heatmap" class="controls">
-          <option value="heatmap">Show Heatmap</option>
-          <option value="markers" selected>Show Markers</option>
-        </select>
-      </div>
-    </form>
-    <h3 id="filters-label"></h3>
-
-    <p class="bounds" style="padding-top:30px;">Map visible boundaries:
-      <br/>
-      <span id="bounds-right-top" class="bounds"></span><br/>
-      <span id="bounds-left-bottom" class="bounds"></span>
-    </p>
-
-    <div id="filters-container"></div>
+      <form>
+        <div class="form-group">
+          <select id="maptype" class="controls">
+            <option value="hybrid">Hybrid Map</option>
+            <option value="terrain" selected>Terrain map</option>
+            <!--<option id="road">Road</option>-->
+            <option value="satellite">Satellite map</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select id="show-heatmap" class="controls">
+            <option value="heatmap">Show heatmap</option>
+            <option value="markers" selected>Show markers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select id="show-refresh" class="controls">
+            <option value="1">Refresh every 1 second</option>
+            <option value="5" selected>Refresh every 5 seconds</option>
+            <option value="15">Refresh every 15 seconds</option>
+            <option value="30">Refresh every 30 seconds</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select id="show-leave" class="controls">
+            <option value="1">Leave a 5 seconds tail</option>
+            <option value="5" selected>Leave a 15 seconds tail</option>
+            <option value="15">Leave a 30 seconds tail</option>
+            <option value="30">Leave a 60 seconds tail</option>
+          </select>
+        </div>
+      </form>
+      <p class="bounds" style="padding-top:30px;">Map visible boundaries:
+        <br/>
+        <span id="bounds-right-top" class="bounds"></span><br/>
+        <span id="bounds-left-bottom" class="bounds"></span>
+      </p>
+    </div>
   </div>
 </div>
 
 
 <div class="right-pane expanded">
-  <div class="handle"></div>
+  <div class="eps-counter">
+    <div class="eps-label"></div>
+    <div class="eps-chart"></div>
+
+  </div>
+  <div class="expand"><i class="glyphicon glyphicon-collapse-up"></i></div>
   <div class="content filters">
     <h3 style="margin-bottom:0;margin-top:0;">Filters</h3>
-<p style="padding-top:10px;">Draw polygons to indicate what geo sources should be included and filter by dimensions and metrics to further refine the results.</p>
+
+    <p style="padding-top:10px;">Draw polygons to indicate what geo sources should be included and filter by dimensions
+      and metrics to further refine the results.</p>
     <h4 id="drawing-tools-label">Drawing tools</h4>
+
     <p>Draw polygons and filter results.</p>
+
     <div id="drawing-tools-container"></div>
     <div class="clearfix"></div>
   </div>
 </div>
-
+<!--
 <div class="bottom-pane">
   <div class="handle"></div>
   <div class="content">
@@ -97,7 +122,7 @@
     </div>
   </div>
 </div>
-
+-->
 
 </body>
 </html>

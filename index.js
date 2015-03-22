@@ -12,6 +12,7 @@ joola.init({}, function (err) {
 
   joola.users.verifyAPIToken({user: joola.SYSTEM_USER}, 'apitoken-demo', function (err, user) {
     function generateRandomData() {
+      var date = new Date();
       var randomGeoPoints = generateRandomPoints({'lat': 32.476664, 'lon': 34.974388}, 1000, 5);
       randomGeoPoints.forEach(function (point) {
         point.timestamp = date;

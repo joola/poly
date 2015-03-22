@@ -79,26 +79,46 @@ $("#volume").slider({
  });
  */
 
-var bottom_expanded = false;
-var left_expanded = false;
+var EPSData = [];
+var left_expanded = true;
+var right_expanded = true;
+
+function collapse_left(e, force) {
+  if (left_expanded || force) {
+    $('.left-pane').removeClass('expanded');
+    $('.left-pane .expand i').removeClass('glyphicon-collapse-up');
+    $('.left-pane .expand i').addClass('glyphicon-collapse-down');
+    left_expanded = false;
+  }
+  else {
+    $('.left-pane').addClass('expanded');
+    $('.left-pane .expand i').removeClass('glyphicon-collapse-down');
+    $('.left-pane .expand i').addClass('glyphicon-collapse-up');
+    left_expanded = true;
+  }
+}
+
+
+function collapse_right(e, force) {
+  if (right_expanded || force) {
+    $('.right-pane').removeClass('expanded');
+    $('.right-pane .expand i').removeClass('glyphicon-collapse-up');
+    $('.right-pane .expand i').addClass('glyphicon-collapse-down');
+    right_expanded = false;
+  }
+  else {
+    $('.right-pane').addClass('expanded');
+    $('.right-pane .expand i').removeClass('glyphicon-collapse-down');
+    $('.right-pane .expand i').addClass('glyphicon-collapse-up');
+    right_expanded = true;
+  }
+}
+
 $().ready(function () {
-  $('.bottom-pane .handle').on('click', function () {
-    if (bottom_expanded)
-      $('.bottom-pane').removeClass('expanded');
-    else
-      $('.bottom-pane').addClass('expanded');
-    bottom_expanded = !bottom_expanded;
-  });
-  $('.left-pane .handle').on('click', function () {
-    if (left_expanded)
-      $('.left-pane').removeClass('expanded');
-    else
-      $('.left-pane').addClass('expanded');
-    left_expanded = !left_expanded;
-  });
+  $('.right-pane .expand').on('click',collapse_right);
+  $('.left-pane .expand').on('click', collapse_left);
 
   $('#maptype').on('change', function () {
-    console.log('change', $(this).val());
     switch ($(this).val().toLowerCase()) {
       case 'hybrid':
         map.setMapTypeId(google.maps.MapTypeId.HYBRID);
@@ -124,7 +144,95 @@ $().ready(function () {
     var _drawingManager = $('div[title="Stop drawing"]').parentsUntil('.gmnoprint').parent();
     $(_drawingManager).addClass('drawing-manager');
     $(_drawingManager).css({position: 'inherit', margin: 0, top: 'auto', left: 'auto'});
-    console.log('dm', _drawingManager);
     $(_drawingManager).appendTo('#drawing-tools-container');
   }, 1000);
+
+  $(document).keyup(function (e) {
+
+    if (e.keyCode == 27) {
+      collapse_left(e, true);
+      collapse_right(e, true);
+    }   // escape key maps to keycode `27`
+  });
+
+
+  // We use an inline data source in the example, usually data would
+  // be fetched from a server
+
+  var data = [],
+    totalPoints = 300;
+
+  function getRandomData() {
+
+    if (data.length > 0)
+      data = data.slice(1);
+
+    // Do a random walk
+
+    while (data.length < totalPoints) {
+
+      var prev = data.length > 0 ? data[data.length - 1] : 50,
+        y = prev + Math.random() * 10 - 5;
+
+      y = 5
+
+      data.push(y);
+    }
+
+    // Zip the generated y values with the x values
+
+    var res = [];
+    for (var i = 0; i < data.length; ++i) {
+      res.push([i, data[i]])
+    }
+
+    return res;
+  }
+
+  var plot = $.plot(".eps-chart", [getRandomData()], {
+    series: {
+      color: "rgba(0, 0, 0, 0.2)",
+      shadowSize: 0	// Drawing is faster without shadows
+    },
+    yaxis: {
+      show: false,
+      min: 0
+    },
+    xaxis: {
+      show: false
+    },
+    grid: {
+      show: false
+    }
+  });
+
+  function update() {
+    var res = [];
+    var length = 60;
+    var counter = 0;
+    var sum = 0;
+
+    var data = EPSData.slice(0);
+    if (data.length > length)
+      data = data.splice(EPSData.length - length, EPSData.length );
+    for (var i = 0; i < length - data.length; i++) {
+      res.push([counter++, 0]);
+    }
+    for (var i = 0; i < data.length; ++i) {
+      res.push([counter++, data[i]]);
+      sum += data[i];
+    }
+    plot.setData([{lines: {show: true, fill: true, fillColor: "rgba(0, 0, 0, 0.2)"}, data: res}]);
+
+    // Since the axes don't change, we don't need to call plot.setupGrid()
+    plot.setupGrid();
+    plot.draw();
+    //$('.eps-label').html('Online<br/><span class="counter">'+(Math.round(sum / length * 100) / 100) + ' EPS <span>');
+    $('.eps-label').html('<div class="led led-green"></div>Online');
+    setTimeout(update, 1000);
+  }
+
+  update();
+
+  // Add the Flot version string to the footer
 });

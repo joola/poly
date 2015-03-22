@@ -115,7 +115,7 @@ function collapse_right(e, force) {
 }
 
 $().ready(function () {
-  $('.right-pane .expand').on('click',collapse_right);
+  $('.right-pane .expand').on('click', collapse_right);
   $('.left-pane .expand').on('click', collapse_left);
 
   $('#maptype').on('change', function () {
@@ -214,7 +214,7 @@ $().ready(function () {
 
     var data = EPSData.slice(0);
     if (data.length > length)
-      data = data.splice(EPSData.length - length, EPSData.length );
+      data = data.splice(EPSData.length - length, EPSData.length);
     for (var i = 0; i < length - data.length; i++) {
       res.push([counter++, 0]);
     }
@@ -222,17 +222,30 @@ $().ready(function () {
       res.push([counter++, data[i]]);
       sum += data[i];
     }
-    plot.setData([{lines: {show: true, fill: true, fillColor: "rgba(0, 0, 0, 0.2)"}, data: res}]);
+    plot.setData([
+      {lines: {show: true, fill: true, fillColor: "rgba(0, 0, 0, 0.2)"}, data: res}
+    ]);
 
     // Since the axes don't change, we don't need to call plot.setupGrid()
     plot.setupGrid();
     plot.draw();
     //$('.eps-label').html('Online<br/><span class="counter">'+(Math.round(sum / length * 100) / 100) + ' EPS <span>');
-    $('.eps-label').html('<div class="led led-green"></div>Online');
+    $('.eps-label').html('<div class="led led-green"></div>Live');
     setTimeout(update, 1000);
   }
 
   update();
+  $('#dragbar').mousedown(function (e) {
+    e.preventDefault();
+    $(document).mousemove(function (e) {
+      $('.left-pane').css("width", e.pageX + 2);
+      $('#map-canvas').css("left", e.pageX + 2);
+      $('#ghostbar').remove();
+    });
 
-  // Add the Flot version string to the footer
+    $(document).mouseup(function (e) {
+      $(document).unbind('mousemove');
+    });
+  });
 });
+

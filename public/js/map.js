@@ -7,7 +7,10 @@ function initialize() {
     mapTypeId: google.maps.MapTypeId.TERRAIN
   };
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
+  google.maps.event.addListenerOnce(map, 'idle', function(){
+    //startup joola
+    startupJoola();
+  });
   // Create the search box and link it to the UI element.
   var input =    document.getElementById('pac-input');
   //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -59,7 +62,6 @@ function initialize() {
     var bounds = map.getBounds();
     searchBox.setBounds(bounds);
     
-    console.log(bounds.getNorthEast());
     $('#bounds-right-top').text('NE:' +bounds.getNorthEast().lat() + ', '+ bounds.getNorthEast().lng());
     $('#bounds-left-bottom').text('SW: ' +bounds.getSouthWest().lat() + ', '+ bounds.getSouthWest().lng());
   });
@@ -146,10 +148,11 @@ function initialize() {
     joola.emit('polygon_added', [event.overlay]);
   });
   google.maps.event.addListener(map, 'click', function (e) {
-    console.log('e', e)
+    //console.log('e', e)
   });
 }
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 // create a constructor
 function Tooltip(options) {
@@ -168,7 +171,6 @@ function Tooltip(options) {
   var me = this;
 // Show tooltip on mouseover event.
   google.maps.event.addListener(me.marker_, 'mouseover', function () {
-    console.log('over');
     me.show();
   });
 // Hide tooltip on mouseout event.

@@ -20,6 +20,9 @@ joola.init({}, function (err) {
         point.location = {lat: point.lat, lon: point.lon};
         point.tag = 'tag';
         point.metric = 1;
+        delete point.lat;
+        delete point.lon;
+
       });
 
       joola.beacon.insert({user: user}, 'geo', randomGeoPoints, function (err) {

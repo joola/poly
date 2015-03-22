@@ -11,7 +11,7 @@ html, body, #map-canvas {
   box-sizing: inherit;
 }
 
-.controls {
+.mcontrols {
   margin-top: 16px;
   border: 1px solid transparent;
   border-radius: 2px 0 0 2px;
@@ -32,7 +32,7 @@ html, body, #map-canvas {
   width: 250px;
 }
 
-select.controls {
+select.mcontrols {
   background-color: #fff;
   font-family: Roboto;
   font-size: 15px;
@@ -78,9 +78,9 @@ select.controls {
 
 #player {
   position: absolute;
-  bottom: 20px;
+  right: 100px;
   width: 350px;
-  height: 50px;
+  height: 100px;
   margin: auto auto;
 }
 
@@ -162,8 +162,8 @@ select.controls {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 
   border-bottom-right-radius: 10px;
-  transition: all 0.5s;
-  transition-timing-function: ease-in-out;
+  /*transition: all 0.5s;
+  transition-timing-function: ease-in-out;*/
 }
 
 .left-pane .logo {
@@ -188,6 +188,7 @@ select.controls {
   height: 100%;
   width: 19%;
   border-bottom-right-radius: 0;
+  min-width: 305px;
 }
 
 .left-pane .content {
@@ -251,7 +252,6 @@ select.controls {
   border-bottom-left-radius: 0;
 }
 
-
 .right-pane .eps-counter {
   margin-bottom: 30px;
   transition: all 0.5s;
@@ -261,7 +261,7 @@ select.controls {
 .right-pane .eps-counter {
   position: absolute;
   top: 480px;
-  right:320px;
+  right: 320px;
 }
 
 .right-pane.expanded .eps-counter {
@@ -269,11 +269,10 @@ select.controls {
   right: 20px;
 }
 
-
 .right-pane .expand {
   position: relative;
   top: 495px;
-  right:480px;
+  right: 480px;
   font-size: 28px;
   float: right;
   margin-right: 15px;
@@ -285,7 +284,7 @@ select.controls {
 
 .right-pane.expanded .expand {
   top: 15px;
-  right:180px;
+  right: 180px;
 }
 
 .right-pane .content {
@@ -403,4 +402,26 @@ select.controls {
   background-color: #4AB;
   border-radius: 50%;
   box-shadow: #000 0 -1px 7px 1px, inset #006 0 -1px 9px, #06F 0 2px 14px;
+}
+
+.ui-resizable-ghost {
+  border: 1px dotted gray;
+}
+
+#dragbar {
+  background-color: inherit;
+  height: 100%;
+  float: right;
+  width: 5px;
+  cursor: col-resize;
+  margin-right: -1px;
+}
+
+#ghostbar {
+  width: 3px;
+  background-color: #000;
+  opacity: 0.5;
+  position: absolute;
+  cursor: col-resize;
+  z-index: 999
 }

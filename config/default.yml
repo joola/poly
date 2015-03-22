@@ -1,4 +1,4 @@
-version: 0.2.9
+version: 0.3.10
 interfaces:
   webserver:
     enabled: true
@@ -460,6 +460,7 @@ workspaces:
           - "users:expireToken"
           - "users:permissions"
           - "beacon:insert"
+          - "beacon:subscribe"
           - "query:fetch"
           - "query:stop"
           - "system:nodeuid"

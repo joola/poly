@@ -1,7 +1,7 @@
 var joola = require('joola'),
   st = require('node-static'),
   http = require('http'),
-  file = new st.Server('./index.html');
+  file = new st.Server('./public');
 
 process.env.JOOLA_CONFIG_STORE_LOGGER_CONSOLE_LEVEL = 'trace';
 
@@ -13,7 +13,10 @@ joola.init({}, function (err) {
   joola.users.verifyAPIToken({user: joola.SYSTEM_USER}, 'apitoken-demo', function (err, user) {
     function generateRandomData() {
       var randomGeoPoints = generateRandomPoints({'lat': 32.476664, 'lon': 34.974388}, 5000, 5);
+      var date = new Date();
       randomGeoPoints.forEach(function (point) {
+        point.timestamp = date;
+        date.setMilliseconds(date.getMilliseconds() - 5);
         point.location = {lat: point.lat, lon: point.lon};
         point.tag = 'tag';
         point.metric = 1;

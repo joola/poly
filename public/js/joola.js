@@ -118,21 +118,18 @@ joola.on('ready', function () {
       throw err;
   });
 
-  var counter = 0;
   joola.io.socket.on('event', function (collection, data) {
     EPSData.push(data.length);
     data.forEach(function (point) {
-      //console.log(point);
       point.lat = point.location.lat;
       point.lon = point.location.lon;
-      //addMarker(point)
 
-      var marker = L.marker([point.lat, point.lon], {
-        icon: L.mapbox.marker.icon({
-          'marker-color': '#f86767'
-        })
+      var marker = L.marker(new L.LatLng(point.lat, point.lon), {
+        icon: L.mapbox.marker.icon({'marker-color': '#f86767', 'marker-size': 'small'}),
+        data: point
       });
-      //marker.addTo(map);
+      markers.addLayer(marker);
     });
+    onmove();
   });
 });

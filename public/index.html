@@ -8,35 +8,48 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/default.css">
 
-  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
-  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
-  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css' rel='stylesheet' />
-  
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css'
+        rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css'
+        rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css'
+        rel='stylesheet'/>
+
   <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
   <script src="http://layout.jquery-dev.com/lib/js/jquery.layout-latest.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
   <!--<script
       src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>-->
-  
+
   <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
   <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
-  
-  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
+
+  <script
+      src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
   <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
+  <script
+      src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+
   <script src="/js/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
-  
+
   <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
   <script src="/js/state.js"></script>
   <script src="/js/wireframe.js"></script>
   <script src="/js/geohash.js"></script>
   <script src="/js/joola.js"></script>
-  
+
 </head>
 <body>
 
 <div id="map-canvas"></div>
+
+  <pre id='coordinates' class='ui-coordinates resizable'></pre>
+  
+
 <!--
 <nav class='menu-ui'>
   <a href='#' id='grid' class='active'>Interactivity</a>
@@ -131,12 +144,12 @@
 </div>
 
 
-<div class="right-pane"  style="visibility:hidden;">
+<div class="right-pane" style="visibility:hidden;">
 
   <div class="eps-counter">
     <div class="eps-label"></div>
     <div class="eps-chart"></div>
-    <div id="player"style="display:none;">
+    <div id="player" style="display:none;">
       <div id="volume"></div>
     </div>
   </div>

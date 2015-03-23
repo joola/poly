@@ -279,5 +279,7 @@ $().ready(function () {
       $('.left-pane').css("transition-timing-function", 'ease-in-out');
     });
   });
+
+  $( ".resizable" ).resizable();
 });
 

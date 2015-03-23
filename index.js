@@ -19,7 +19,9 @@ joola.init({}, function (err) {
         date.setMilliseconds(date.getMilliseconds() - 5);
         point.location = {lat: point.lat, lon: point.lon};
         point.tag = 'tag';
+        point.type = 'sensor';
         point.metric = 1;
+        point.humidity = 0.9;
         delete point.lat;
         delete point.lon;
 

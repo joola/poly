@@ -189,59 +189,14 @@ $().ready(function () {
     return res;
   }
 
-  var plot = $.plot(".eps-chart", [getRandomData()], {
-    series: {
-      color: "rgba(0, 0, 0, 0.2)",
-      shadowSize: 0	// Drawing is faster without shadows
-    },
-    yaxis: {
-      show: false,
-      min: 0
-    },
-    xaxis: {
-      show: false
-    },
-    grid: {
-      show: false
-    }
-  });
 
-  function update() {
-    var res = [];
-    var length = 60;
-    var counter = 0;
-    var sum = 0;
-
-    var data = EPSData.slice(0);
-    if (data.length > length)
-      data = data.splice(EPSData.length - length, EPSData.length);
-    for (var i = 0; i < length - data.length; i++) {
-      res.push([counter++, 0]);
-    }
-    for (var i = 0; i < data.length; ++i) {
-      res.push([counter++, data[i]]);
-      sum += data[i];
-    }
-    plot.setData([
-      {lines: {show: true, fill: true, fillColor: "rgba(0, 0, 0, 0.2)"}, data: res}
-    ]);
-
-    // Since the axes don't change, we don't need to call plot.setupGrid()
-    plot.setupGrid();
-    plot.draw();
-    //$('.eps-label').html('Online<br/><span class="counter">'+(Math.round(sum / length * 100) / 100) + ' EPS <span>');
-    $('.eps-label').html('<div class="led led-green"></div>Live');
-    setTimeout(update, 1000);
-  }
-
-  update();
   $('.hideonshrink').hide();
   $('#table').addClass('hide-controls');
   $('.showmore').on('click', function () {
     $('.left-pane').css("width", '650px');
     $('.hideonshrink').show();
     $('.showmore').hide();
-    
+
   });
   $('#dragbar').mousedown(function (e) {
     e.preventDefault();
@@ -280,6 +235,29 @@ $().ready(function () {
     });
   });
 
-  $( ".resizable" ).resizable();
+  $('.resizable').resizable({ handles: "n, e, s, w"});
+  $('.draggable').draggable({ handle: ".handle" });
+
+
+  function pointColor(feature) {
+    return feature.metric > 5 ? '#f55' : '#a00';
+  }
+
+  function pointRadius(feature) {
+    return (feature.metric - 4) * 10;
+  }
+
+  function scaledPoint(feature, latlng) {
+    return L.circleMarker(latlng, {
+      radius: pointRadius(feature),
+      fillColor: pointColor(feature),
+      fillOpacity: 0.7,
+      weight: 0.5,
+      color: '#fff'
+    }).bindPopup(
+        '<h2>' + feature.properties.place + '</h2>' +
+        '<h3>' + new Date(feature.timestamp) + '</h3>' +
+        feature.metric + ' magnitude');
+  }
 });
 

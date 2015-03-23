@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="http://layout.jquery-dev.com/lib/css/layout-default-latest.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/black-tie/jquery-ui.css">
   <link rel="stylesheet" href="/css/default.css">
 
   <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet'/>
@@ -32,23 +33,34 @@
   <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
   <script
       src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js' charset="utf-8"></script>
+  
   <script src="/js/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 
+  <script src="/js/vendor/crossfilter.js"></script>
+  
   <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
   <script src="/js/state.js"></script>
   <script src="/js/wireframe.js"></script>
   <script src="/js/geohash.js"></script>
   <script src="/js/joola.js"></script>
+  <script src="/js/timeline.js"></script>
 
 </head>
 <body>
 
 <div id="map-canvas"></div>
 
-  <pre id='coordinates' class='ui-coordinates resizable'></pre>
-  
+<div id="details" class="resizable draggable">
+  <div class="header handle">Details Window</div>
+  <div class="content">
+    <pre id='coordinates' class='ui-coordinates'></pre>
+    <div class="clearfix"></div>
+  </div>
+</div>
 
 <!--
 <nav class='menu-ui'>
@@ -64,111 +76,6 @@
 <div id='position' class='ui-control'>
   <code id='mousemove'></code><br/>
 </div>
-<div class="left-pane expanded resizable" style="display:none;">
-  <div id="dragbar"></div>
-  <div class="content map-controls">
-    <div class="expand"><i class="glyphicon glyphicon-collapse-up"></i></div>
-    <img src="http://joo.la/img/joola_full_blue.png" class="logo">
-    <input id="pac-input" class="mcontrols" type="text" placeholder="Search Box"/>
-
-    <div class="outer-wrapper">
-
-      <div class="col-sm-3">
-        <h3 style="margin-bottom:0;margin-top:20px;">Map overlay</h3>
-
-        <p>Control the map look & feel</p>
-
-        <form>
-          <div class="form-group">
-            <select id="maptype" class="mcontrols">
-              <option value="hybrid">Hybrid Map</option>
-              <option value="terrain" selected>Terrain map</option>
-              <!--<option id="road">Road</option>-->
-              <option value="satellite">Satellite map</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <select id="show-heatmap" class="mcontrols">
-              <option value="heatmap">Show heatmap</option>
-              <option value="markers" selected>Show markers</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <select id="show-refresh" class="mcontrols hideonshrink">
-              <option value="1">Refresh every 1 second</option>
-              <option value="5" selected>Refresh every 5 seconds</option>
-              <option value="15">Refresh every 15 seconds</option>
-              <option value="30">Refresh every 30 seconds</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <select id="show-leave" class="mcontrols hideonshrink">
-              <option value="1">Leave a 5 seconds tail</option>
-              <option value="5" selected>Leave a 15 seconds tail</option>
-              <option value="15">Leave a 30 seconds tail</option>
-              <option value="30">Leave a 60 seconds tail</option>
-            </select>
-          </div>
-        </form>
-        <div class="showmore"><a href="#" class="">show more...</a>
-        </div>
-      </div>
-      <div class="col-sm-3">
-        <div class="filters" style="padding-top:0">
-          <h3 style="margin-bottom:0;margin-top:20px;">Filters</h3>
-
-          <p style="padding-top:10px;">Draw polygons and filter by
-            dimensions
-            and metrics to refine the results.</p>
-
-          <div id="drawing-tools-container"></div>
-        </div>
-        <div class="showmore"><a href="#" class="">show more...</a>
-        </div>
-      </div>
-
-      <div class="col-sm-12">
-        <div class="visualizations">
-          <div id="table"></div>
-        </div>
-      </div>
-
-
-      <p class="bounds" style="padding-top:30px;">Map visible boundaries:
-        <br/>
-        <span id="bounds-right-top" class="bounds"></span><br/>
-        <span id="bounds-left-bottom" class="bounds"></span>
-      </p>
-    </div>
-  </div>
-</div>
-
-
-<div class="right-pane" style="visibility:hidden;">
-
-  <div class="eps-counter">
-    <div class="eps-label"></div>
-    <div class="eps-chart"></div>
-    <div id="player" style="display:none;">
-      <div id="volume"></div>
-    </div>
-  </div>
-  <div class="expand"><i class="glyphicon glyphicon-collapse-up"></i></div>
-
-</div>
-<!--
-<div class="bottom-pane">
-  <div class="handle"></div>
-  <div class="content">
-    <div class="row">
-      <div id="metric1" class="col-md-4">test</div>
-      <div class="col-md-4">test</div>
-      <div class="col-md-4">test</div>
-      <div class="col-md-4">test</div>
-    </div>
-  </div>
-</div>
--->
 
 </body>
 </html>

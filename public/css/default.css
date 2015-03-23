@@ -525,19 +525,41 @@ select.mcontrols {
   z-index: 1001;
 }
 
+#details {
+  position: absolute;
+
+  bottom: 60px;
+  left: 10px;
+  background-color: black;
+
+  min-width: 450px;
+  min-height: 200px;
+}
+
 pre.ui-coordinates {
   background: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  bottom: 50px;
-  left: 10px;
   padding: 0;
 
   color: #fff;
   font-size: 11px;
   line-height: 18px;
   border-radius: 3px;
-  max-height: 240px;
+  max-height: 350px;
   overflow: auto;
-  
-  width:650px;
+  width: 100%;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }

@@ -7,11 +7,11 @@ joola.on('ready', function () {
     metrics: ['metric'],
     collection: 'geo',
     realtime: {
-      enabled: true,
+      enabled: false,
       interval: state.get('config.refresh.duration')
     }
   };
-  new joola.viz.Table({
+  /*new joola.viz.Table({
     container: '#table',
     query: query,
     pickers: {
@@ -72,7 +72,7 @@ joola.on('ready', function () {
       // L.mapbox.featureLayer(geojson).addTo(map);
     }
   });
-
+*/
   /*
    joola.on('polygon_added', function (marker) {
    var _query = joola.common.extend(query, {
@@ -119,6 +119,8 @@ joola.on('ready', function () {
   });
 
   joola.io.socket.on('event', function (collection, data) {
+    if (['geo'].indexOf(collection) === -1)
+      return;
     EPSData.push(data.length);
     data.forEach(function (point) {
       point.lat = point.location.lat;
@@ -128,7 +130,11 @@ joola.on('ready', function () {
         icon: L.mapbox.marker.icon({'marker-color': '#f86767', 'marker-size': 'small'}),
         data: point
       });
-      markers.addLayer(marker);
+      //markers.addLayer(marker);
+    });
+    markers.eachLayer(function (marker) {
+      //heat.addLatLng(marker.getLatLng());
+
     });
     onmove();
   });

@@ -1,6 +1,6 @@
 var map;
 var geojson = [];
-
+var heat;
 var markers = new L.MarkerClusterGroup({ polygonOptions: {
   fillColor: '#3887be',
   color: '#3887be',
@@ -11,7 +11,7 @@ var markers = new L.MarkerClusterGroup({ polygonOptions: {
 
 $().ready(function () {
   L.mapbox.accessToken = 'pk.eyJ1Ijoiam9vbGEiLCJhIjoiNnFpMlJEbyJ9.R3cNnoE_WpDSxtJIjhN3JQ';
-  map = L.mapbox.map('map-canvas', 'joola.lhekjm4g').setView(L.latLng(32.476664, 34.974388), 13);
+  map = L.mapbox.map('map-canvas').setView(L.latLng(32.476664, 34.974388), 13);
 
 
   L.control.layers({
@@ -65,6 +65,19 @@ $().ready(function () {
 // call onmove off the bat so that the list is populated.
 // otherwise, there will be no markers listed until the map is moved.
   onmove();
+
+  heat = L.heatLayer([], { maxZoom: 18}).addTo(map);
+
+
+  /* var layer = L.mapbox.featureLayer().on('ready', function() {
+   console.log('test');
+   // Zoom the map to the bounds of the markers.
+   map.fitBounds(layer.getBounds());
+   // Add each marker point to the heatmap.
+   layer.eachLayer(function(l) {
+   heat.addLatLng(l.getLatLng());
+   });
+   });*/
 });
 
 

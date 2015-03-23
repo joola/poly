@@ -8,96 +8,118 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/default.css">
 
-
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet' />
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet' />
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css' rel='stylesheet' />
+  
   <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
   <script src="http://layout.jquery-dev.com/lib/js/jquery.layout-latest.js"></script>
 
-  <script
-      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>
+  <!--<script
+      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,drawing,geometry"></script>-->
+  
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
+  
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
+  <script src="/js/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+  
   <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
   <script src="/js/state.js"></script>
   <script src="/js/wireframe.js"></script>
   <script src="/js/geohash.js"></script>
   <script src="/js/joola.js"></script>
-  <script src="/js/map.js"></script>
-
+  
 </head>
 <body>
 
 <div id="map-canvas"></div>
-<div class="left-pane expanded resizable">
+<!--
+<nav class='menu-ui'>
+  <a href='#' id='grid' class='active'>Interactivity</a>
+  <a href='#' id='legend'>Legend</a>
+  <a href='#' id='zoomer' class='active'>Zoomer</a>
+  <a href='#' id='fullscreen'>Fullscreen</a>
+  <a href='#' id='attribution' class='active'>Attribution</a>
+  <a href='#' id='hash'>Hash</a>
+  <a href='#' id='geocoder'>Geocoder</a>
+  <a href='#' id='infocontrol'>Info Control</a>
+</nav>-->
+<div id='position' class='ui-control'>
+  <code id='mousemove'></code><br/>
+</div>
+<div class="left-pane expanded resizable" style="display:none;">
   <div id="dragbar"></div>
   <div class="content map-controls">
     <div class="expand"><i class="glyphicon glyphicon-collapse-up"></i></div>
     <img src="http://joo.la/img/joola_full_blue.png" class="logo">
+    <input id="pac-input" class="mcontrols" type="text" placeholder="Search Box"/>
 
     <div class="outer-wrapper">
-      <input id="pac-input" class="mcontrols" type="text" placeholder="Search Box"/>
 
+      <div class="col-sm-3">
+        <h3 style="margin-bottom:0;margin-top:20px;">Map overlay</h3>
 
-      <h3 style="margin-bottom:0;margin-top:40px;">Map overlay</h3>
+        <p>Control the map look & feel</p>
 
-      <p>Control the map look & feel</p>
-
-      <div class="row">
-        <div class="col-md-3">
-          <form>
-            <div class="form-group">
-              <select id="maptype" class="mcontrols">
-                <option value="hybrid">Hybrid Map</option>
-                <option value="terrain" selected>Terrain map</option>
-                <!--<option id="road">Road</option>-->
-                <option value="satellite">Satellite map</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <select id="show-heatmap" class="mcontrols">
-                <option value="heatmap">Show heatmap</option>
-                <option value="markers" selected>Show markers</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <select id="show-refresh" class="mcontrols">
-                <option value="1">Refresh every 1 second</option>
-                <option value="5" selected>Refresh every 5 seconds</option>
-                <option value="15">Refresh every 15 seconds</option>
-                <option value="30">Refresh every 30 seconds</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <select id="show-leave" class="mcontrols">
-                <option value="1">Leave a 5 seconds tail</option>
-                <option value="5" selected>Leave a 15 seconds tail</option>
-                <option value="15">Leave a 30 seconds tail</option>
-                <option value="30">Leave a 60 seconds tail</option>
-              </select>
-            </div>
-          </form>
-        </div>
- <div class="col-md-3">
-      <div class="content filters">
-        <h3 style="margin-bottom:0;margin-top:0;">Filters</h3>
-
-        <p style="padding-top:10px;">Draw polygons to indicate what geo sources should be included and filter by
-          dimensions
-          and metrics to further refine the results.</p>
-        <h4 id="drawing-tools-label">Drawing tools</h4>
-
-        <p>Draw polygons and filter results.</p>
-
-        <div id="drawing-tools-container"></div>
-      </div>
-      </div>     </div>
-
-      <div class="row">
-        <div class="col-md-9">
-          <div class="visualizations">
-            <div id="table"></div>
+        <form>
+          <div class="form-group">
+            <select id="maptype" class="mcontrols">
+              <option value="hybrid">Hybrid Map</option>
+              <option value="terrain" selected>Terrain map</option>
+              <!--<option id="road">Road</option>-->
+              <option value="satellite">Satellite map</option>
+            </select>
           </div>
+          <div class="form-group">
+            <select id="show-heatmap" class="mcontrols">
+              <option value="heatmap">Show heatmap</option>
+              <option value="markers" selected>Show markers</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="show-refresh" class="mcontrols hideonshrink">
+              <option value="1">Refresh every 1 second</option>
+              <option value="5" selected>Refresh every 5 seconds</option>
+              <option value="15">Refresh every 15 seconds</option>
+              <option value="30">Refresh every 30 seconds</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="show-leave" class="mcontrols hideonshrink">
+              <option value="1">Leave a 5 seconds tail</option>
+              <option value="5" selected>Leave a 15 seconds tail</option>
+              <option value="15">Leave a 30 seconds tail</option>
+              <option value="30">Leave a 60 seconds tail</option>
+            </select>
+          </div>
+        </form>
+        <div class="showmore"><a href="#" class="">show more...</a>
         </div>
       </div>
+      <div class="col-sm-3">
+        <div class="filters" style="padding-top:0">
+          <h3 style="margin-bottom:0;margin-top:20px;">Filters</h3>
+
+          <p style="padding-top:10px;">Draw polygons and filter by
+            dimensions
+            and metrics to refine the results.</p>
+
+          <div id="drawing-tools-container"></div>
+        </div>
+        <div class="showmore"><a href="#" class="">show more...</a>
+        </div>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="visualizations">
+          <div id="table"></div>
+        </div>
+      </div>
+
 
       <p class="bounds" style="padding-top:30px;">Map visible boundaries:
         <br/>
@@ -109,12 +131,12 @@
 </div>
 
 
-<div class="right-pane">
+<div class="right-pane"  style="visibility:hidden;">
 
   <div class="eps-counter">
     <div class="eps-label"></div>
     <div class="eps-chart"></div>
-    <div id="player">
+    <div id="player"style="display:none;">
       <div id="volume"></div>
     </div>
   </div>

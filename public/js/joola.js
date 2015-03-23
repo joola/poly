@@ -1,8 +1,5 @@
 joola.on('ready', function () {
   console.log('Joola SDK ready, version', joola.VERSION);
-});
-
-var startupJoola = function () {
   var query = {
     timeframe: 'last_5_seconds',
     interval: 'second',
@@ -10,7 +7,7 @@ var startupJoola = function () {
     metrics: ['metric'],
     collection: 'geo',
     realtime: {
-      enabled: false,
+      enabled: true,
       interval: state.get('config.refresh.duration')
     }
   };
@@ -62,8 +59,17 @@ var startupJoola = function () {
         point = point.raw;
         point.lat = point.location_lat;
         point.lon = point.location_lon;
-        addMarker(point);
+        //addMarker(point);
+
+        var marker = L.marker([point.lat, point.lon], {
+          icon: L.mapbox.marker.icon({
+            'marker-color': '#f86767'
+          })
+        });
+        //marker.addTo(map);
+
       });
+      // L.mapbox.featureLayer(geojson).addTo(map);
     }
   });
 
@@ -113,8 +119,20 @@ var startupJoola = function () {
   });
 
   var counter = 0;
-  joola.io.socket.on('event', function (data) {
+  joola.io.socket.on('event', function (collection, data) {
     EPSData.push(data.length);
-    /**/
+    data.forEach(function (point) {
+      //console.log(point);
+      point.lat = point.location.lat;
+      point.lon = point.location.lon;
+      //addMarker(point)
+
+      var marker = L.marker([point.lat, point.lon], {
+        icon: L.mapbox.marker.icon({
+          'marker-color': '#f86767'
+        })
+      });
+      //marker.addTo(map);
+    });
   });
-};
+});

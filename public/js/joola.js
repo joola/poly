@@ -1,5 +1,5 @@
 var query = {
-  timeframe: 'last_5_seconds',
+  timeframe: 'last_90_seconds',
   interval: 'second',
   dimensions: ['location.lat', 'location.lon', 'tag'],
   metrics: ['metric'],
@@ -14,6 +14,8 @@ joola.on('ready', function () {
   console.log('Joola SDK ready, version', joola.VERSION);
 
   joola.on('query_updated', function () {
+    console.log('got query updated');
+    console.trace();
     if (lastQueryUUID && lastQueryUUID.length > 0){
       console.log('stopping',lastQueryUUID);
       joola.query.stop(lastQueryUUID);
@@ -24,6 +26,7 @@ joola.on('ready', function () {
         throw err;
 
       lastQueryUUID = docs[0].query.realtimeUID;
+      console.log('fetched',lastQueryUUID);
 
       var data = docs[0].documents;
       data.forEach(function (point) {

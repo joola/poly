@@ -1,7 +1,7 @@
 var realtime = true;
 joola.on('ready', function () {
   joola.query.fetch({
-    timeframe: 'last_3_minutes',
+    timeframe: 'last_90_seconds',
     interval: 'second',
     dimensions: ['timestamp'],
     metrics: ['metric'],
@@ -30,11 +30,11 @@ joola.on('ready', function () {
   });
 
 // sizing information, including margins so there is space for labels, etc
-  var margin = { top: 5, right: 5, bottom: 5, left: 5 },
-    width = 960 - margin.left - margin.right,
-    height = 25 - margin.top - margin.bottom,
+  var margin = { top: 5, right: 5, bottom: 0, left: 5 },
+    width = $('svg.timeline').width() - margin.left - margin.right,
+    height = 21 - margin.top - margin.bottom,
     marginOverview = { top: 0, right: margin.right, bottom: 0, left: margin.left },
-    heightOverview = 25 - marginOverview.top - marginOverview.bottom;
+    heightOverview = 21 - marginOverview.top - marginOverview.bottom;
 
 // set up a date parsing function for future use
   var parseDate = d3.time.format("%d/%m/%Y").parse;
@@ -66,9 +66,9 @@ joola.on('ready', function () {
     .orient("bottom");
 
   // something for us to render the chart into
-  var svg = d3.select("body")
-    .append("svg") // the overall space
-    .attr('class', 'timeline')
+  var svg = d3.select("svg.timeline")
+    //.append("svg") // the overall space
+    //.attr('class', 'timeline')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
   /*var main = svg.append("g")
@@ -76,17 +76,15 @@ joola.on('ready', function () {
    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");*/
   var overview = svg.append("g")
     .attr("class", "overview")
-    .attr("transform", "translate(" + marginOverview.left + "," + marginOverview.top + ")");
+  //.attr("transform", "translate(" + marginOverview.left + "," + marginOverview.top + ")");
 
   // brush tool to let us zoom and pan using the overview chart
   var brush = d3.svg.brush()
     .x(xOverview)
     .on('brushstart', function () {
-      console.log('start');
       realtime = false;
     })
     .on('brushend', function () {
-      console.log('end');
       brushed();
     });
   //.on("brush", brushed);
@@ -101,10 +99,10 @@ joola.on('ready', function () {
     };
 
 
-    overview.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + heightOverview + ")")
-      .call(xAxisOverview);
+    /*overview.append("g")
+     .attr("class", "x axis")
+     .attr("transform", "translate(0," + heightOverview + ")")
+     .call(xAxisOverview);*/
 
     overview.append("g").attr("class", "bars");
 
@@ -197,16 +195,20 @@ joola.on('ready', function () {
     x.domain(brush.empty() ? xOverview.domain() : brush.extent());
     // redraw the bars on the main chart
 
-    console.log(x.domain(), brush.empty());
+    //console.log(x.domain(), brush.empty());
     if (!brush.empty()) {
       realtime = false;
       query.timeframe = {start: x.domain()[0], end: x.domain()[1]};
       query.realtime = {enabled: false};
+      $('#button_play i').attr('class', "fa fa-play");
+      $('.timeline-state-caption').text('Paused');
     }
     else {
       realtime = true;
-      query.timeframe = 'last_5_seconds';
+      query.timeframe = 'last_90_seconds';
       query.realtime = {enabled: true, interval: 5000};
+      $('#button_play i').attr('class', "fa fa-pause");
+      $('.timeline-state-caption').text('Last 90 sec.');
     }
     joola.emit('query_updated');
     /*main.selectAll(".bar.stack")

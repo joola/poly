@@ -515,14 +515,20 @@ select.mcontrols {
   background: #3074a4;
 }
 
-.ui-control {
-  background: #fff;
+.ui-control code {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  padding: 10px;
+  top: 50px;
+  left: 50%;
+  margin-left: -110px;
+  width: 220px;
   border-radius: 3px;
   z-index: 1001;
+  text-align: center;
+  padding-top:5px;
+}
+
+.ui-control code:empty {
+  display:none;
 }
 
 #details {
@@ -566,20 +572,82 @@ pre.ui-coordinates {
   shape-rendering: crispEdges;
 }
 
-svg.timeline {
-
-  background-color:whitesmoke;
-
+.timeline-wrapper {
   position: absolute;
   top: 10px;
-  width: 660px;
   left: 50%;
-  margin-left: -330px;
-  border:1px solid white;
-  padding:2px;
+  width: 40%;
+  margin-left: -20%;
+
+  border: 0 solid white;
+  border-radius: 3px;
+  background-color: whitesmoke;
+  line-height: 1;
+  display: table;
+}
+
+svg.timeline {
+  width: 100%;
+  display: table-cell;
+  line-height: 0;
+  padding-top: 2px;
+}
+
+.timeline-wrapper .timeline-controls {
+  display: table-cell;
+  border: 1px solid #449d44;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  background-color: #5cb85c;
+  border-right: 1px solid #666;
+  width: 34px;
+}
+
+.timeline-wrapper .timeline-controls:hover {
+  background-color: #449d44;
+}
+
+.timeline-wrapper .timeline-controls:hover .btn {
+  background-color: #449d44;
+}
+
+.timeline-wrapper .timeline-controls .btn {
+  padding: 0;
+  padding-right: 5px;
+  padding-left: 5px;
+  border-radius: 0;
+  border: 0;
+  position: relative;
+  top: -5px;
+  left: 5px;
+}
+
+.timeline-wrapper .timeline-controls .btn:active, .timeline-wrapper .timeline-controls .btn:focus {
+  color: white;
+}
+
+.timeline-wrapper .timeline-state {
+  display: table-cell;
+  padding-left: 5px;
+  background-color: #5cb85c;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid #5cb85c;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+  color: white;
+  border-left: 1px solid #666;
+  width: 95px;
+}
+
+.timeline-wrapper .timeline-state .timeline-state-caption {
+  position: relative;
+  top: -4px;
+  left: 5px;
 }
 
 .bar {
   fill: black;
-  fill-opacity:0.825;
+  fill-opacity: 0.825;
 }

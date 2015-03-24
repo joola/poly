@@ -721,9 +721,6 @@ svg.timeline {
   font-size: 14px !important;
 }
 
-.compareoption {
-  display: none !important;
-}
 
 [jio-type=datepicker] .picker .wrapper .control .optionscontainer .daterange .dateoption {
   width: 7.5em !important;

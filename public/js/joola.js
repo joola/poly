@@ -115,7 +115,8 @@ joola.on('ready', function () {
   joola.io.socket.on('event', function (collection, data) {
     if (['geo'].indexOf(collection) === -1)
       return;
-    EPSData.shift();
+    if (EPSData.length > 90)
+      EPSData.shift();
     var sum = 0;
     data.forEach(function (d) {
       sum += d.metric;

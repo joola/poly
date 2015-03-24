@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="http://layout.jquery-dev.com/lib/css/layout-default-latest.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/black-tie/jquery-ui.css">
+  <!--<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/black-tie/jquery-ui.css">-->
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/default.css">
 
@@ -41,25 +41,29 @@
   <script src="/js/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 
-  <script src="/js/vendor/crossfilter.js"></script>
-
-  <script src="http://localhost:8080/joola.js?APIToken=apitoken-demo"></script>
+  <script src="http://localhost:8080/joola.js"></script>
   <script src="/js/state.js"></script>
-  <script src="/js/wireframe.js"></script>
+  <script src="/js/globals.js"></script>
   <script src="/js/geohash.js"></script>
   <script src="/js/joola.js"></script>
+  <script src="/js/wireframe.js"></script>
   <script src="/js/timeline.js"></script>
-
+  <script src="/js/sequence.js"></script>
 </head>
 <body>
 
 <div id="map-canvas"></div>
 
-<div id="details" class="resizable draggable">
-  <div class="header handle">Details Window</div>
+<div id="details" class="expanded">
+  <div class="header handle ">
+    <span class="showingresults">
+      Loading data...
+    </span>
+  </div>
   <div class="content">
-    <pre id='coordinates' class='ui-coordinates'></pre>
-    <div class="clearfix"></div>
+    <div id="table"></div>
+    <!--<pre id='coordinates' class='ui-coordinates'></pre>
+    <div class="clearfix"></div>-->
   </div>
 </div>
 
@@ -74,9 +78,9 @@
   <a href='#' id='geocoder'>Geocoder</a>
   <a href='#' id='infocontrol'>Info Control</a>
 </nav>-->
-<div id='position' class='ui-control'>
-  <code id='mousemove'></code><br/>
-</div>
+
+<code id='mousemove'></code>
+
 
 <div class="timeline-wrapper">
   <div class="timeline-controls">
@@ -90,3 +94,5 @@
 </div>
 </body>
 </html>
+    
+    

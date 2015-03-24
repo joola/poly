@@ -1,6 +1,3 @@
-var map;
-var geojson = [];
-var heat;
 var markers = new L.MarkerClusterGroup({ polygonOptions: {
   fillColor: '#3887be',
   color: '#3887be',
@@ -9,9 +6,9 @@ var markers = new L.MarkerClusterGroup({ polygonOptions: {
   fillOpacity: 0.5
 }});
 
-$().ready(function () {
+function initMap(next) {
   L.mapbox.accessToken = 'pk.eyJ1Ijoiam9vbGEiLCJhIjoiNnFpMlJEbyJ9.R3cNnoE_WpDSxtJIjhN3JQ';
-  map = L.mapbox.map('map-canvas').setView(L.latLng(32.476664, 34.974388), 13);
+  map = L.mapbox.map('map-canvas', null, {attributionControl: {compact: true}}).setView(L.latLng(32.476664, 34.974388), 13);
 
 
   L.control.layers({
@@ -78,10 +75,10 @@ $().ready(function () {
    heat.addLatLng(l.getLatLng());
    });
    });*/
-  
+
   joola.emit('start');
-  
-});
+  next();
+};
 
 
 function onmove() {

@@ -1,3 +1,4 @@
+var realtime = true;
 joola.on('ready', function () {
   joola.query.fetch({
     timeframe: 'last_3_minutes',
@@ -17,20 +18,23 @@ joola.on('ready', function () {
     var data = results[0].documents;
     data = _.sortBy(data, function (d) {
       d.timestamp = new Date(d.timestamp);
-      d.counts = [1, 2, 3];
       d.total = d.metric;
       return d.timestamp;
     });
 
-    drawTimeline(data);
+    EPSData = data.concat(EPSData);
+    EPSData = _.filter(EPSData, function (x) {
+      return x;
+    });
+    drawTimeline(EPSData);
   });
 
 // sizing information, including margins so there is space for labels, etc
-  var margin = { top: 20, right: 20, bottom: 100, left: 20 },
+  var margin = { top: 5, right: 5, bottom: 5, left: 5 },
     width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom,
-    marginOverview = { top: 430, right: margin.right, bottom: 20, left: margin.left },
-    heightOverview = 500 - marginOverview.top - marginOverview.bottom;
+    height = 25 - margin.top - margin.bottom,
+    marginOverview = { top: 0, right: margin.right, bottom: 0, left: margin.left },
+    heightOverview = 25 - marginOverview.top - marginOverview.bottom;
 
 // set up a date parsing function for future use
   var parseDate = d3.time.format("%d/%m/%Y").parse;
@@ -39,26 +43,18 @@ joola.on('ready', function () {
   var colour = d3.scale.ordinal()
     .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-// mathematical scales for the x and y axes
-  var x = d3.scale.linear()
-    .domain([0, 1])
+  // mathematical scales for the x and y axes
+  var x = d3.time.scale()
     .range([0, width]);
-
   var y = d3.scale.linear()
-    .domain([0, 100])
-    .rangeRound([0, height]);
-  /*
-   var x = d3.time.scale()
-   .range([0, width]);
-   var y = d3.scale.linear()
-   .range([height, 0]);*/
+    .range([height, 0]);
   var xOverview = d3.time.scale()
     .range([0, width]);
   var yOverview = d3.scale.linear()
     .range([heightOverview, 0]);
 
 
-// rendering for the x and y axes
+  // rendering for the x and y axes
   var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
@@ -69,9 +65,10 @@ joola.on('ready', function () {
     .scale(xOverview)
     .orient("bottom");
 
-// something for us to render the chart into
+  // something for us to render the chart into
   var svg = d3.select("body")
     .append("svg") // the overall space
+    .attr('class', 'timeline')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
   /*var main = svg.append("g")
@@ -81,48 +78,49 @@ joola.on('ready', function () {
     .attr("class", "overview")
     .attr("transform", "translate(" + marginOverview.left + "," + marginOverview.top + ")");
 
-// brush tool to let us zoom and pan using the overview chart
+  // brush tool to let us zoom and pan using the overview chart
   var brush = d3.svg.brush()
     .x(xOverview)
-    .on("brush", brushed);
-
+    .on('brushstart', function () {
+      console.log('start');
+      realtime = false;
+    })
+    .on('brushend', function () {
+      console.log('end');
+      brushed();
+    });
+  //.on("brush", brushed);
 
   function drawTimeline(data) {
-    // data ranges for the x and y axes
-    x.domain(d3.extent(data, function (d) {
-      return d.timestamp;
-    }));
-    y.domain([0, d3.max(data, function (d) {
-      return d.total;
-    })]);
-    xOverview.domain(x.domain());
-    yOverview.domain(y.domain());
 
-    colour.domain(d3.keys(data[0]));
     var magFn = function (d) {
       return d.metric
-    }
+    };
     var dateFn = function (d) {
       return d.timestamp;
     };
+
 
     overview.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + heightOverview + ")")
       .call(xAxisOverview);
 
-
-    var initialSize = 0;
-    overview.append("g")
-      .attr("class", "bars");
-
+    overview.append("g").attr("class", "bars");
 
     function refresh() {
-      //if (initialSize === 0)
-      //  initialSize = data.length;
-      //else
-      //  data = data.splice(data.length - initialSize, initialSize);
-      console.log(data.length);
+      // data ranges for the x and y axes
+      x.domain(d3.extent(data, function (d) {
+        return d.timestamp;
+      }));
+      y.domain([0, d3.max(data, function (d) {
+        return d.total;
+      })]);
+      xOverview.domain(x.domain());
+      yOverview.domain(y.domain());
+
+      colour.domain(d3.keys(data[0]));
+
       var points = overview
         .selectAll('.bars').selectAll('.bar')
         .data(data, dateFn);
@@ -130,22 +128,14 @@ joola.on('ready', function () {
       points
         .enter().insert("svg:rect", "line")
         .attr("class", "bar")
-        //.attr("x", function (d, i) {
-        //  
-        // return x(i + 1) - .5;
-        //})
-        //.attr("y", function (d) {
-        // return height - y(d.total) - .5;
-        //})
         .attr("x", function (d) {
-          //console.log(xOverview(d.timestamp) - 3)
+          //console.log(xOverview(d.timestamp) - 3);
           return xOverview(d.timestamp) - 3;
         })
         .attr("y", function (d) {
           return yOverview(d.total);
         })
-        .attr("width", 20)
-        //
+        .attr("width", 4)
         .attr("height", function (d) {
           return heightOverview - yOverview(d.total);
         })
@@ -159,17 +149,16 @@ joola.on('ready', function () {
         .transition()
         .duration(1000)
         .attr("x", function (d, i) {
-          
           return  xOverview(d.timestamp) - 3;
         });
 
       points
         .exit()
-        //.transition().duration(1000)
-        //.attr('x', function (d, i) {
-        //  console.log(xOverview(d.timestamp) - 3);
-        //  return  xOverview(d.timestamp) - 3;
-        //})
+        .transition().duration(1000)
+        .attr('x', function (d, i) {
+          //console.log(xOverview(d.timestamp) - 3);
+          return  xOverview(d.timestamp) - 3;
+        })
         .remove();
     }
 
@@ -179,8 +168,12 @@ joola.on('ready', function () {
      });*/
 
     setInterval(function () {
-      data.shift();
-      data.push({timestamp: new Date(), total: 10, counts: [1, 2, 3]});
+      //console.log(EPSData);
+      //data=EPSData;
+      //data.shift();
+      //data.push({timestamp: new Date(), total: 10});
+      if (!realtime)
+        return;
       refresh();
     }, 1000);
 
@@ -203,6 +196,19 @@ joola.on('ready', function () {
     // update the main chart's x axis data range
     x.domain(brush.empty() ? xOverview.domain() : brush.extent());
     // redraw the bars on the main chart
+
+    console.log(x.domain(), brush.empty());
+    if (!brush.empty()) {
+      realtime = false;
+      query.timeframe = {start: x.domain()[0], end: x.domain()[1]};
+      query.realtime = {enabled: false};
+    }
+    else {
+      realtime = true;
+      query.timeframe = 'last_5_seconds';
+      query.realtime = {enabled: true, interval: 5000};
+    }
+    joola.emit('query_updated');
     /*main.selectAll(".bar.stack")
      .attr("transform", function (d) {
      return "translate(" + x(d.date) + ",0)";

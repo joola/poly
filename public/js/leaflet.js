@@ -78,6 +78,9 @@ $().ready(function () {
    heat.addLatLng(l.getLatLng());
    });
    });*/
+  
+  joola.emit('start');
+  
 });
 
 

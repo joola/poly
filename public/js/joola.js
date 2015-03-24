@@ -1,78 +1,113 @@
+var query = {
+  timeframe: 'last_5_seconds',
+  interval: 'second',
+  dimensions: ['location.lat', 'location.lon', 'tag'],
+  metrics: ['metric'],
+  collection: 'geo',
+  realtime: {
+    enabled: true,
+    interval: state.get('config.refresh.duration')
+  }
+};
+var lastQueryUUID = '';
 joola.on('ready', function () {
   console.log('Joola SDK ready, version', joola.VERSION);
-  var query = {
-    timeframe: 'last_5_seconds',
-    interval: 'second',
-    dimensions: ['location.lat', 'location.lon', 'tag'],
-    metrics: ['metric'],
-    collection: 'geo',
-    realtime: {
-      enabled: false,
-      interval: state.get('config.refresh.duration')
-    }
-  };
-  /*new joola.viz.Table({
-    container: '#table',
-    query: query,
-    pickers: {
-      primary: {
-        enabled: false
-      },
-      add_dimension: {
-        enabled: true,
-        caption: 'Add dimension...',
-        allowRemove: false,
-        allowSelect: false
-      },
-      add_metric: {
-        enabled: true,
-        caption: 'Add metric...',
-        allowRemove: false,
-        allowSelect: false
-      }
-    },
-    enter: function (data) {
-      var addMarker = function (point) {
-        var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(point.lat, point.lon),
-          map: map
-        });
-        var chHtml = "<h4>Event details</h4><div>";
-        Object.keys(point).forEach(function (key) {
-          var elem = point[key];
-          if (typeof elem !== 'object')
-            chHtml += '<strong>' + key + ':</strong> ' + elem + '<br/>';
-        });
-        var chInfoWindow = new google.maps.InfoWindow({
-          content: chHtml,
-          maxWidth: 250
-        });
-        google.maps.event.addListener(marker, 'click', function () {
-          chInfoWindow.open(map, marker);
-        });
-        setTimeout(function () {
-          marker.setMap(null);
-        }, state.get('config.tail.duration'));
-      };
 
+  joola.on('query_updated', function () {
+    if (lastQueryUUID && lastQueryUUID.length > 0){
+      console.log('stopping',lastQueryUUID);
+      joola.query.stop(lastQueryUUID);
+    }
+    
+    joola.query.fetch(query, function (err, docs) {
+      if (err)
+        throw err;
+
+      lastQueryUUID = docs[0].query.realtimeUID;
+
+      var data = docs[0].documents;
       data.forEach(function (point) {
-        point = point.raw;
         point.lat = point.location_lat;
         point.lon = point.location_lon;
-        //addMarker(point);
 
-        var marker = L.marker([point.lat, point.lon], {
-          icon: L.mapbox.marker.icon({
-            'marker-color': '#f86767'
-          })
+        var marker = L.marker(new L.LatLng(point.lat, point.lon), {
+          icon: L.mapbox.marker.icon({'marker-color': '#f86767', 'marker-size': 'small'}),
+          data: point
         });
-        //marker.addTo(map);
+        markers.addLayer(marker);
+      });
+      markers.eachLayer(function (marker) {
+        //heat.addLatLng(marker.getLatLng());
 
       });
-      // L.mapbox.featureLayer(geojson).addTo(map);
-    }
+    });
   });
-*/
+  setTimeout(function () {
+    joola.emit('query_updated');
+  }, 500);
+
+  /*new joola.viz.Table({
+   container: '#table',
+   query: query,
+   pickers: {
+   primary: {
+   enabled: false
+   },
+   add_dimension: {
+   enabled: true,
+   caption: 'Add dimension...',
+   allowRemove: false,
+   allowSelect: false
+   },
+   add_metric: {
+   enabled: true,
+   caption: 'Add metric...',
+   allowRemove: false,
+   allowSelect: false
+   }
+   },
+   enter: function (data) {
+   var addMarker = function (point) {
+   var marker = new google.maps.Marker({
+   position: new google.maps.LatLng(point.lat, point.lon),
+   map: map
+   });
+   var chHtml = "<h4>Event details</h4><div>";
+   Object.keys(point).forEach(function (key) {
+   var elem = point[key];
+   if (typeof elem !== 'object')
+   chHtml += '<strong>' + key + ':</strong> ' + elem + '<br/>';
+   });
+   var chInfoWindow = new google.maps.InfoWindow({
+   content: chHtml,
+   maxWidth: 250
+   });
+   google.maps.event.addListener(marker, 'click', function () {
+   chInfoWindow.open(map, marker);
+   });
+   setTimeout(function () {
+   marker.setMap(null);
+   }, state.get('config.tail.duration'));
+   };
+
+   data.forEach(function (point) {
+   point = point.raw;
+   point.lat = point.location_lat;
+   point.lon = point.location_lon;
+   //addMarker(point);
+
+   var marker = L.marker([point.lat, point.lon], {
+   icon: L.mapbox.marker.icon({
+   'marker-color': '#f86767'
+   })
+   });
+   //marker.addTo(map);
+
+   });
+   // L.mapbox.featureLayer(geojson).addTo(map);
+   }
+   });
+   */
   /*
    joola.on('polygon_added', function (marker) {
    var _query = joola.common.extend(query, {
@@ -121,7 +156,8 @@ joola.on('ready', function () {
   joola.io.socket.on('event', function (collection, data) {
     if (['geo'].indexOf(collection) === -1)
       return;
-    EPSData.push(data.length);
+    EPSData.shift();
+    EPSData.push({timestamp: new Date(), metric: 0, total: data.length});
     data.forEach(function (point) {
       point.lat = point.location.lat;
       point.lon = point.location.lon;

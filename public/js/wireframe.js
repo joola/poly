@@ -259,5 +259,7 @@ $().ready(function () {
         '<h3>' + new Date(feature.timestamp) + '</h3>' +
         feature.metric + ' magnitude');
   }
+
+ 
 });
 

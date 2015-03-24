@@ -552,14 +552,34 @@ pre.ui-coordinates {
 .axis {
   font: 10px sans-serif;
 }
+
 .axis path,
 .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
 .brush .extent {
   stroke: #fff;
-  fill-opacity: .125;
+  fill-opacity: .225;
   shape-rendering: crispEdges;
+}
+
+svg.timeline {
+
+  background-color:whitesmoke;
+
+  position: absolute;
+  top: 10px;
+  width: 660px;
+  left: 50%;
+  margin-left: -330px;
+  border:1px solid white;
+  padding:2px;
+}
+
+.bar {
+  fill: black;
+  fill-opacity:0.825;
 }

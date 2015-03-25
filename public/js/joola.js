@@ -30,7 +30,15 @@ joola.on('ready', function () {
      });
      });*/
 
-    
+    var bounds = map.getBounds();
+    bounds = [
+      [bounds.getNorthWest().lat, bounds.getNorthWest().lng],
+      [bounds.getSouthEast().lat, bounds.getSouthEast().lng]
+    ];
+
+    query.filters = [];
+    query.filters.push(['location', 'geo_bounds', bounds]);
+    console.log(query.filters);
     new joola.viz.Table({
       container: '#table',
       query: query,
@@ -115,7 +123,7 @@ joola.on('ready', function () {
     data.forEach(function (d) {
       sum += d.metric;
     });
-    EPSData.push({timestamp: new Date(), metric: sum, total: sum });
+    EPSData.push({timestamp: new Date(), metric: sum, total: sum});
     /*data.forEach(function (point) {
      point.lat = point.location.lat;
      point.lon = point.location.lon;
@@ -147,7 +155,7 @@ function buildShowingResults() {
   $('.showingresults').html(result);
 }
 
-function stopRunningQueries(){
+function stopRunningQueries() {
   while (runningQueries.length > 0) {
     var lastQueryUUID = runningQueries.pop();
 

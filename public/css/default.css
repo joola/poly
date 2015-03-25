@@ -535,7 +535,8 @@ code#mousemove:empty {
   position: fixed;
 
   height: 550px;
-  bottom: -530px;
+  max-height: 50%;
+  bottom: -48%;
   width: 80%;
   left: 50%;
   margin-left: -40%;

@@ -13,7 +13,10 @@ joola.init({}, function (err) {
   joola.users.verifyAPIToken({user: joola.SYSTEM_USER}, 'apitoken-demo', function (err, user) {
     function generateRandomData() {
       var date = new Date();
-      var randomGeoPoints = generateRandomPoints({'lat': 32.476664, 'lon': 34.974388}, 5000, Math.floor(Math.random() * 10) + 1);
+      var randomGeoPoints = generateRandomPoints({
+        'lat': 32.476664,
+        'lon': 34.974388
+      }, 5000, Math.floor(Math.random() * 10) + 1);
       randomGeoPoints.forEach(function (point) {
         point.timestamp = date;
         date.setMilliseconds(date.getMilliseconds() - 5);
@@ -38,12 +41,13 @@ joola.init({}, function (err) {
     //setInterval(queryData, 1000);
   });
 
+  var port = process.env.PORT || 3000;
   http.createServer(function (request, response) {
     request.addListener('end', function () {
       file.serve(request, response);
     }).resume();
-  }).listen(3000, function () {
-    console.log('Server ready.');
+  }).listen(port, function () {
+    console.log('Server ready, port ' + port + '.');
   });
 });
 

@@ -535,7 +535,7 @@ code#mousemove:empty {
   position: fixed;
 
   height: 550px;
-  bottom: -500px;
+  bottom: -530px;
   width: 80%;
   left: 50%;
   margin-left: -40%;
@@ -545,6 +545,8 @@ code#mousemove:empty {
   border-top-right-radius: 3px;
 
   font-size: 14px;
+  transition: all 0.5s;
+  transition-timing-function: ease-in-out;
 
 }
 
@@ -729,4 +731,9 @@ svg.timeline {
 
 [jio-type=datepicker] .ui-datepicker-title {
   padding-top: 10px !important;
+}
+
+.expand{
+  cursor: pointer;
+  color:#337ab7;
 }

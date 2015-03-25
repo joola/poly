@@ -13,18 +13,20 @@ joola.init({}, function (err) {
   joola.users.verifyAPIToken({user: joola.SYSTEM_USER}, 'apitoken-demo', function (err, user) {
     function generateRandomData() {
       var date = new Date();
-      var randomGeoPoints = generateRandomPoints({'lat': 32.476664, 'lon': 34.974388}, 5000, Math.floor(Math.random() * 60) + 1);
+      var randomGeoPoints = generateRandomPoints({'lat': 32.476664, 'lon': 34.974388}, 5000, Math.floor(Math.random() * 10) + 1);
       randomGeoPoints.forEach(function (point) {
         point.timestamp = date;
         date.setMilliseconds(date.getMilliseconds() - 5);
         point.location = {lat: point.lat, lon: point.lon};
         point.tag = 'tag';
         point.type = 'sensor';
+        point.uuid = joola.common.uuid();
         point.metric = Math.floor(Math.random() * 60) + 1;
+        point.temp = (Math.floor(Math.random() * 42) + 1);
+        point.echo_level = (Math.floor(Math.random() * 200) + 1);
         point.humidity = (Math.floor(Math.random() * 100) + 1) / 100;
         delete point.lat;
         delete point.lon;
-
       });
 
       joola.beacon.insert({user: user}, 'geo', randomGeoPoints, function (err) {

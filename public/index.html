@@ -41,7 +41,7 @@
   <script src="/js/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 
-  <script src="http://localhost:8080/joola.js"></script>
+  <script src="http://home.joo.la:8081/joola.js"></script>
   <script src="/js/state.js"></script>
   <script src="/js/globals.js"></script>
   <script src="/js/geohash.js"></script>
@@ -54,11 +54,12 @@
 
 <div id="map-canvas"></div>
 
-<div id="details" class="expanded">
+<div id="details" class="">
   <div class="header handle ">
     <span class="showingresults">
       Loading data...
     </span>
+    <span class="expand pull-right">Expand</span>
   </div>
   <div class="content">
     <div id="table"></div>
@@ -80,11 +81,8 @@
 </nav>-->
 
 <code id='mousemove'></code>
-
-
 <div class="timeline-wrapper">
   <div class="timeline-controls">
-
     <button type="button" id="button_play" class="btn btn-success" onclick='buttonPlayPress()'>
       <i class="fa fa-play"></i>
     </button>

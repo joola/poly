@@ -14,5 +14,5 @@ var map;
 var geojson = [];
 var heat;
 var EPSData = [];
-
+var currentTableMarkers = {};
 var realtime = true;

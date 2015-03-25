@@ -29,4 +29,17 @@ $().ready(function(){
   
   $('.resizable').resizable({handles:'all'});
   $('.draggable').draggable({handle:'.handle'});
+  
+  
+  $('.expand').on('click',function(){
+    var self = $(this);
+    if ($('#details').hasClass('expanded')){
+      $('#details').removeClass('expanded');
+      self.text('Expand');
+    }
+    else{
+      $('#details').addClass('expanded');
+      self.text('Collapse');
+    }
+  });
 });

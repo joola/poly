@@ -10,11 +10,20 @@ function initMap(next) {
   L.mapbox.accessToken = 'pk.eyJ1Ijoiam9vbGEiLCJhIjoiNnFpMlJEbyJ9.R3cNnoE_WpDSxtJIjhN3JQ';
   map = L.mapbox.map('map-canvas', null, {attributionControl: {compact: true}}).setView(L.latLng(32.476664, 34.974388), 13);
 
+  layers = L.control.layers({
+      Satellite: L.mapbox.tileLayer('joola.lhekjm4g'),
+      Dark: L.mapbox.tileLayer('joola.lhf4b967').addTo(map)
+    }, {}, {collapsed: false}
+  ).addTo(map);
 
-  L.control.layers({
-    'Satellite': L.mapbox.tileLayer('joola.lhekjm4g'),
-    'Dark': L.mapbox.tileLayer('joola.lhf4b967').addTo(map)
-  }).addTo(map);
+  map.on('overlayadd', function (e) {
+    var layer = e.layer;
+    console.log('overlay added', e);
+  });
+  map.on('overlayremove', function (e) {
+    var layer = e.layer;
+    console.log('overlay removed', e);
+  });
 
   var featureGroup = L.featureGroup().addTo(map);
   var drawControl = new L.Control.Draw({

@@ -36,9 +36,11 @@ joola.on('ready', function () {
       [bounds.getSouthEast().lat, bounds.getSouthEast().lng]
     ];
 
+    var collections = {};
+
     query.filters = [];
     query.filters.push(['location', 'geo_bounds', bounds]);
-    console.log(query.filters);
+    //console.log(query.filters);
     new joola.viz.Table({
       container: '#table',
       query: query,
@@ -64,9 +66,58 @@ joola.on('ready', function () {
         if (runningQueries.indexOf(uuid) === -1)
           runningQueries.push(uuid);
         buildShowingResults();
+
+
       },
       enter: function (data) {
         data.forEach(function (point) {
+          //build the collection list
+          var source_id = point.raw.source_id;
+          if (source_id) {
+            collections[source_id] = collections[source_id] || 0;
+            collections[source_id]++;
+          }
+          Object.keys(layers._layers).forEach(function (key) {
+            var layer = layers._layers[key];
+            var name = layer.name;
+            if (!layer.overlay)
+              return;
+            var found = false;
+            Object.keys(collections).forEach(function (col) {
+              if (name.indexOf(col) > -1)
+                found = true;
+            });
+            if (!found) {
+              //console.log('Removing layer', name);
+              layers.removeLayer(layer.layer);
+            }
+          });
+          Object.keys(collections).forEach(function (col) {
+            var found = false;
+            Object.keys(layers._layers).forEach(function (key) {
+              var layer = layers._layers[key];
+              var name = layer.name;
+              if (name.indexOf(col) > -1) {
+                //console.log('Updating layer', name);
+               // layer.name = col + ' (' + collections[col] + ')';
+                found = true;
+              }
+            });
+            if (!found) {
+              //var featureLayer = L.mapbox.featureLayer().addTo(map);
+              //console.log('Adding layer', col);
+              var featureLayer = new L.MarkerClusterGroup({ polygonOptions: {
+                fillColor: '#3887be',
+                color: '#3887be',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.5
+              }}).addTo(map);
+              layers.addOverlay(featureLayer, col);
+            }
+          });
+          //layers._update();
+
           var key = point.key;
           point = point.raw;
 
@@ -79,7 +130,18 @@ joola.on('ready', function () {
             data: point,
             uuid: key
           });
-          markers.addLayer(marker);
+
+          Object.keys(layers._layers).forEach(function (key) {
+            var layer = layers._layers[key];
+            var name = layer.name;
+            if (name.indexOf(source_id) > -1) {
+              //console.log('adding point', marker);
+              layer.layer.addLayer(marker);
+            }
+          });
+
+
+          //markers.addLayer(marker);
           currentTableMarkers[key] = marker;
           markers.eachLayer(function (marker) {
             //heat.addLatLng(marker.getLatLng());

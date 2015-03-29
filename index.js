@@ -23,6 +23,7 @@ joola.init({}, function (err) {
         point.location = {lat: point.lat, lon: point.lon};
         point.tag = 'tag';
         point.type = 'sensor';
+        point.source_id = ((Math.floor(Math.random() * 100) + 0) / 100) < 0.5 ? 'sensor' : 'arial';
         point.uuid = joola.common.uuid();
         point.metric = Math.floor(Math.random() * 60) + 1;
         point.temp = (Math.floor(Math.random() * 42) + 1);

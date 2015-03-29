@@ -1,7 +1,7 @@
 var query = {
   timeframe: 'last_90_seconds',
   interval: 'second',
-  dimensions: ['location.lat', 'location.lon', 'tag', 'type'],
+  dimensions: ['source_id', 'location.lat', 'location.lon', 'tag', 'type'],
   metrics: ['metric', {key: 'humidity', aggregation: 'avg', decimals: 2}],
   collection: 'geo',
   realtime: {
@@ -9,8 +9,9 @@ var query = {
     interval: state.get('config.refresh.duration')
   }
 };
-var runningQueries=[];
+var runningQueries = [];
 var map;
+var layers;
 var geojson = [];
 var heat;
 var EPSData = [];

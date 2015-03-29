@@ -1,11 +1,11 @@
 {
   "name": "joola.demo.geo-track",
   "version": "0.0.1",
-  "scripts":
-  {
-    "start":"node index.js"
+  "scripts": {
+    "start": "node index.js"
   },
   "dependencies": {
+    "cloneextend": "0.0.3",
     "joola": "latest",
     "node-static": "^0.7.6"
   }

@@ -2,13 +2,13 @@ module.exports = {
   _save: {key: '_save', value: function () {
     return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.7;
   }},
-  source_id: {key: 'source_id', type: 'dimension', datatype: 'string', value: 'arial'},
+  source_id: {key: 'source_id', type: 'dimension', datatype: 'string', value: 'aerial'},
   sensor_type: {key: 'sensor_type', type: 'dimension', datatype: 'string', value: 'movement'},
   sensor_uid: {key: 'sensor_uid', type: 'dimension', datatype: 'string', value: function () {
     return joola.common.uuid(4)
   }},
   timestamp: {key: 'timestamp', type: 'dimension', datatype: 'date', value: function () {
-    return new Date();
+    return new Date().getTime();
   }},
   grid: {key: 'grid', type: 'dimension', datatype: 'string', value: function () {
     return 'grid-' + Math.floor(Math.random() * 10) + 1

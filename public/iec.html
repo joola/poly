@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Realtime Operations Control | Joola</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="http://layout.jquery-dev.com/lib/css/layout-default-latest.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/iec/js/vendor/introjs.min.css">
+
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.css' rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css'
+        rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css'
+        rel='stylesheet'/>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css'
+        rel='stylesheet'/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/3.11.0/vis.css">
+  <link rel="stylesheet" href="/iec/css/default.css">
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+  <script src="http://layout.jquery-dev.com/lib/js/jquery.layout-latest.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.6/mapbox.js'></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
+
+  <script
+      src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-geodesy/v0.1.0/leaflet-geodesy.js'></script>
+  <script
+      src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+  <script src='/iec/js/vendor/simpleheat.js'></script>
+  <script src='/iec/js/vendor/HeatLayer.js'></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js' charset="utf-8"></script>
+  <script src="/iec/js/vendor/jquery.timeago.js"></script>
+  <script src="/iec/js/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/3.11.0/vis.js"></script>
+  <script src="http://home.joo.la:8081/joola.js"></script>
+  <script src="/iec/js/state.js"></script>
+  <script src="/iec/js/globals.js"></script>
+  <script src="/iec/js/geohash.js"></script>
+  <script src="/iec/js/joola.js"></script>
+  <script src="/iec/js/wireframe.js"></script>
+  <script src="/iec/js/timeline.js"></script>
+  <script src="/iec/js/sequence.js"></script>
+  <script src="/iec/js/network.js"></script>
+</head>
+<body>
+
+<div id="map-canvas"></div>
+<div id='map-overlay-south'></div>
+<pre id='coordinates' class='ui-coordinates'></pre>
+<div id='site-details'>
+  <h3 id="site-name"></h3>
+
+  <div id="details-left" class="left">
+    <div id="network-popUp">
+      <span id="operation">node</span> <br>
+      <table style="margin:auto;">
+        <tr>
+          <td>id</td>
+          <td><input id="node-id" value="new value"></td>
+        </tr>
+        <tr>
+          <td>label</td>
+          <td><input id="node-label" value="new value"></td>
+        </tr>
+      </table>
+      <input type="button" value="save" id="saveButton"></button>
+      <input type="button" value="cancel" id="cancelButton"></button>
+    </div>
+    <div id="mynetwork"></div>
+  </div>
+  <div id="details-right" class="right">
+    <p id="selection">Select a node on the left to see details and alerts.</p>
+    <table id="node-details" class="table table-bordered table-condensed table-striped"></table>
+    <table id="node-alerts" class="table table-bordered table-condensed table-striped"></table>
+  </div>
+</div>
+<!--<div id="details" class="">
+  <div class="header handle ">
+    <span class="showingresults">
+      Loading data...
+    </span>
+    <span class="expand pull-right">Expand</span>
+  </div>
+  <div class="content">
+    <div id="table"></div>
+  </div>
+</div>
+
+<code id='mousemove'></code>
+<div class="timeline-wrapper">
+  <div class="timeline-controls">
+    <button type="button" id="button_play" class="btn btn-success" onclick='buttonPlayPress()'>
+      <i class="fa fa-play"></i>
+    </button>
+  </div>
+  <svg class="timeline"></svg>
+  <div class="timeline-state"><span class="timeline-state-caption">Last 90 sec.</span></div>
+</div>
+
+<script src="/iec/js/vendor/intro.min.js"></script>-->
+</body>
+</html>

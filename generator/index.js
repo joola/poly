@@ -2,26 +2,22 @@ var
   path = require('path'),
   fs = require('fs'),
   ce = require('cloneextend'),
-  joola = require('joola');
+  joola = require('joola.sdk');
 
 process.env.JOOLA_CONFIG_STORE_LOGGER_CONSOLE_LEVEL = 'trace';
 
-joola.init({}, function (err) {
+var counter = 0;
+
+joola.init({host: 'http://localhost:8081', APIToken: 'apitoken-demo'}, function (err) {
   if (err)
     throw err;
 
-  joola.users.verifyAPIToken({user: joola.SYSTEM_USER}, 'apitoken-demo', function (err, user) {
-    if (err)
-      throw err;
-
-    global.user = user;
-    joola.events.emit('goahead');
-  });
+  global.user = joola.USER;
+  joola.events.emit('goahead');
 });
 
 joola.events.on('goahead', function () {
   var sources = [];
-  var dataPoints = [];
   var files = fs.readdirSync(path.join(__dirname, './sources'));
   files.forEach(function (file) {
     joola.logger.info('Require event source from: ./sources/' + file);
@@ -42,31 +38,28 @@ joola.events.on('goahead', function () {
       delete point.lat;
       delete point.lon;
       sources.forEach(function (s) {
-        var _point = ce.extend(point, s);
+        var _point = ce.cloneextend(point, s);
         Object.keys(_point).forEach(function (key) {
           var elem = _point[key].value;
           if (typeof elem === 'function') {
-            _point[key].value = elem.call(this);
+            _point[key].value = elem.apply(_point);
           }
         });
         if (_point._save.value) {
+          var collection = _point._collection ? _point._collection.value : 'geo';
           delete _point._save;
-          dataPoints.push(ce.clone(_point));
+          delete _point._collection;
+          joola.insert(collection, [_point], function (err) {
+            if (err)
+              throw err;
+            counter++;
+            if (counter % 1000 === 0)
+              console.log('Pushed 1000 events');
+          });
         }
       });
     });
-  }, 100);
-
-  setInterval(function () {
-    //var transmission = {};
-    var slicedPoints = dataPoints.splice(0, 1000);
-    if (slicedPoints && slicedPoints.length > 0) {
-      joola.beacon.insert({user: user}, 'geo', slicedPoints, function (err) {
-        if (err)
-          throw err;
-      });
-    }
-  }, 800);
+  }, 700);
 });
 
 //https://gist.github.com/mkhatib/5641004

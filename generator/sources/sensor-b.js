@@ -8,7 +8,7 @@ module.exports = {
     return joola.common.uuid(4)
   }},
   timestamp: {key: 'timestamp', type: 'dimension', datatype: 'date', value: function () {
-    return new Date();
+    return new Date().getTime();
   }},
   grid: {key: 'grid', type: 'dimension', datatype: 'string', value: function () {
     return 'grid-' + Math.floor(Math.random() * 10) + 1

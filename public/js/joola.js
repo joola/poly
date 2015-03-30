@@ -143,9 +143,10 @@ joola.on('ready', function () {
 
           //markers.addLayer(marker);
           currentTableMarkers[key] = marker;
-          markers.eachLayer(function (marker) {
-            //heat.addLatLng(marker.getLatLng());
-          });
+          //markers.eachLayer(function (marker) {
+            console.log('heat');
+            heat.addLatLng(marker.getLatLng());
+         // });
         });
 
         /*

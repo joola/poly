@@ -4,14 +4,15 @@ var network = null;
 
 function draw(data, site) {
 
-  site.viz_data.nodes.forEach(function(node){
-    if (node.alerts && node.alerts.length>0)
-    node.color='#a3e46b';
+  site.viz_data.nodes.forEach(function (node) {
+    if (node.alerts && node.alerts.length > 0) {
+      node.color =  '#fc4353';
+    }
     else
-      node.color='#fc4353';
+      node.color ='#a3e46b';
   });
-  
- 
+
+
   $('#site-name').html(site.properties.title + ' Description');
   // create a network
   var container = document.getElementById('mynetwork');

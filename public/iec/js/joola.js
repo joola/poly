@@ -7,6 +7,7 @@ joola.on('ready', function () {
     joola.fetch(query, function (err, data) {
       if (err)
         throw err;
+
       data = data[0].documents;
 
       GeoJSON.forEach(function (site) {

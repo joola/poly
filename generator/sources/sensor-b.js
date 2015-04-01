@@ -1,4 +1,7 @@
 module.exports = {
+  _collection: {key: '_collection', value: function () {
+    return 'geo';
+  }},
   _save: {key: '_save', value: function () {
     return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.7;
   }},

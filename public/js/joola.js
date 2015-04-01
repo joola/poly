@@ -62,6 +62,7 @@ joola.on('ready', function () {
         }
       },
       done: function (results, raw) {
+        console.log('done', raw);
         var uuid = raw[0].query.realtimeUID;
         if (runningQueries.indexOf(uuid) === -1)
           runningQueries.push(uuid);
@@ -99,20 +100,22 @@ joola.on('ready', function () {
               var name = layer.name;
               if (name.indexOf(col) > -1) {
                 //console.log('Updating layer', name);
-               // layer.name = col + ' (' + collections[col] + ')';
+                // layer.name = col + ' (' + collections[col] + ')';
                 found = true;
               }
             });
             if (!found) {
               //var featureLayer = L.mapbox.featureLayer().addTo(map);
               //console.log('Adding layer', col);
-              var featureLayer = new L.MarkerClusterGroup({ polygonOptions: {
-                fillColor: '#3887be',
-                color: '#3887be',
-                weight: 2,
-                opacity: 1,
-                fillOpacity: 0.5
-              }}).addTo(map);
+              var featureLayer = new L.MarkerClusterGroup({
+                polygonOptions: {
+                  fillColor: '#3887be',
+                  color: '#3887be',
+                  weight: 2,
+                  opacity: 1,
+                  fillOpacity: 0.5
+                }
+              }).addTo(map);
               layers.addOverlay(featureLayer, col);
             }
           });
@@ -144,9 +147,9 @@ joola.on('ready', function () {
           //markers.addLayer(marker);
           currentTableMarkers[key] = marker;
           //markers.eachLayer(function (marker) {
-            console.log('heat');
-            heat.addLatLng(marker.getLatLng());
-         // });
+          console.log('heat');
+          heat.addLatLng(marker.getLatLng());
+          // });
         });
 
         /*

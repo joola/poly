@@ -15,7 +15,7 @@ module.exports = {
     return '1234';
   }},
   event_type: {key: 'event_type', type: 'dimension', datatype: 'string', value: function () {
-    return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.98 ? 'info' : 'alert';
+    return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.8 ? 'info' : 'alert';
   }},
   event_ip: {key: 'event_ip', type: 'dimension', datatype: 'string', value: function () {
     var ips = [

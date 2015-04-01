@@ -91,6 +91,8 @@ function showAlertList() {
   var counter = 0;
   var trs = [];
   featureLayer.eachLayer(function (marker) {
+    if (!marker.feature.alerts)
+      return;
     if (counter > 10)
       return;
 
@@ -98,7 +100,6 @@ function showAlertList() {
       var max_diff_sec = 90;
       var diff = (new Date().getTime() - new Date(alert.timestamp).getTime()) / 1000;
       if (diff > max_diff_sec) {
-        console.log('removing alert from marker',diff);
         marker.feature.alerts.splice(i, 1);
       }
     });
@@ -107,6 +108,8 @@ function showAlertList() {
       marker.feature.alerts.forEach(function (alert) {
         if (counter > 10)
           return;
+        
+        if (alert.event_type==='alert'){
         var $tr = $('<tr></tr>');
         var $td = $('<td></td>');
         $td.html('<time class="timeago" datetime="' + new Date(alert.timestamp).toISOString() + '">' + timeDifference(new Date, new Date(alert.timestamp)) + '</time>');
@@ -125,6 +128,7 @@ function showAlertList() {
         });
         $tr.timestamp = alert.timestamp;
         counter++;
+        }
       });
     }
   });
@@ -138,7 +142,7 @@ function showAlertList() {
   trs.forEach(function ($tr) {
     $table.append($tr);
   });
-  if (trs.length===0){
+  if (trs.length === 0) {
     var $tr = $('<tr></tr>');
     var $td = $('<td>No alerts registered, trying zooming out.</td>');
     $tr.append($td);

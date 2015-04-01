@@ -8,7 +8,7 @@ process.env.JOOLA_CONFIG_STORE_LOGGER_CONSOLE_LEVEL = 'trace';
 
 var counter = 0;
 
-joola.init({host: 'http://localhost:8081', APIToken: 'apitoken-demo'}, function (err) {
+joola.init({host: 'http://lab-001.joo.la:8081', APIToken: 'apitoken-demo'}, function (err) {
   if (err)
     throw err;
 
@@ -49,12 +49,13 @@ joola.events.on('goahead', function () {
           var collection = _point._collection ? _point._collection.value : 'geo';
           delete _point._save;
           delete _point._collection;
+          
           joola.insert(collection, [_point], function (err) {
             if (err)
               throw err;
             counter++;
-            if (counter % 1000 === 0)
-              console.log('Pushed 1000 events');
+            if (counter % 100 === 0)
+              console.log('Pushed 100 events');
           });
         }
       });

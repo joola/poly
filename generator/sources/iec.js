@@ -9,13 +9,13 @@ module.exports = {
     return new Date().getTime();
   }},
   site_id: {key: 'site_id', type: 'dimension', datatype: 'string', value: function () {
-    return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.7 ? '1' : '2'
+    return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.3 ? '1' : (Math.floor(Math.random() * 3) + 2).toString()
   }},
   event_id: {key: 'event_id', type: 'dimension', datatype: 'string', value: function () {
     return '1234';
   }},
   event_type: {key: 'event_type', type: 'dimension', datatype: 'string', value: function () {
-    return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.9 ? 'info' : 'alert';
+    return ((Math.floor(Math.random() * 100) + 1) / 100) < 0.98 ? 'info' : 'alert';
   }},
   event_ip: {key: 'event_ip', type: 'dimension', datatype: 'string', value: function () {
     var ips = [

@@ -4,7 +4,14 @@ var network = null;
 
 function draw(data, site) {
 
-  console.log(site);
+  site.viz_data.nodes.forEach(function(node){
+    if (node.alerts && node.alerts.length>0)
+    node.color='#a3e46b';
+    else
+      node.color='#fc4353';
+  });
+  
+ 
   $('#site-name').html(site.properties.title + ' Description');
   // create a network
   var container = document.getElementById('mynetwork');
@@ -91,7 +98,7 @@ function draw(data, site) {
   });
 
   if (site.alerts.length > 0) {
-    console.log('alerts', site.alerts[0]);
+    //console.log('alerts', site.alerts[0]);
     $tr = $('<tr></tr>');
     ['Timestamp', 'Node', 'Event'].forEach(function (key) {
       if (['site_id', 'event_type', 'metric'].indexOf(key) === -1) {
